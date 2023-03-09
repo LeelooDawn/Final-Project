@@ -1,17 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homepage</title>
-  </head>
-  <body>
-    <h1>Hello There</h1>
-    <form action="/" method="post">
-      <input type="text" name="name" placeholder="What is your name?" />
-      <button type="submit">Submit</button>
-    </form>
-    <h2>{{ name }}</h2>
-  </body>
-</html>
+{% extends "layout.html" %} {% block title %} Register {% endblock %} {% block
+main %}
+<div class="container-fluid">
+  <h1 class="mb-3">Register Here</h1>
+  <form action="/" method="post">
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        name="username"
+        placeholder="Username"
+      />
+    </div>
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        name="password"
+        placeholder="Password"
+      />
+    </div>
+    <div>
+      <input
+        type="email"
+        class="form-control"
+        name="email"
+        placeholder="Email"
+      />
+    </div>
+    <div class="mt-5">
+      <button type="button" class="btn btn-info">Sign Up!</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
