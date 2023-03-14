@@ -1,36 +1,45 @@
 {% extends "layout.html" %} {% block title %} Register {% endblock %} {% block
 main %}
 <div class="container-fluid">
-  <h1 class="mb-3">Register Here</h1>
-  <form action="/" method="post">
-    <div class="mb-3">
-      <input
-        type="text"
-        class="form-control"
-        name="username"
-        placeholder="Username"
-      />
-    </div>
-    <div class="mb-3">
-      <input
-        type="text"
-        class="form-control"
-        name="password"
-        placeholder="Password"
-      />
-    </div>
-    <div>
-      <input
-        type="email"
-        class="form-control"
-        name="email"
-        placeholder="Email"
-      />
-    </div>
-    <div class="mt-5">
-      <button type="button" class="btn btn-info">Sign Up!</button>
-    </div>
-  </form>
+  <div class="col">
+    <h4>Plan Your Potluck!</h4>
+    <p>- Invite Friends</p>
+    <p>- Create Events</p>
+    <p>- Find Recipes</p>
+    <p>- Get Reminders</p>
+  </div>
+  <div class="col">
+    <h1 class="mb-3">Register Here</h1>
+    <form action="/" method="post">
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          name="username"
+          placeholder="Username"
+        />
+      </div>
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          name="password"
+          placeholder="Password"
+        />
+      </div>
+      <div>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          placeholder="Email"
+        />
+      </div>
+      <div class="mt-5">
+        <button type="button" class="btn btn-info">Sign Up!</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 {% endblock %}
