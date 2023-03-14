@@ -2,14 +2,18 @@ import os
 
 from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
+from flask-sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
 from werkzeug.security import check_password_hash, generate_password_hash
-import sqlite3 as db
 
 
 app = Flask(__name__)
 
 #configure SQlite database
-db = sqlite3.connect("potluck.db")
+db_name = 'potluck.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= True
+db = SQLAlchemy(app)
 
 #make sure API key is set
 
@@ -21,12 +25,10 @@ Session(app)
 #app route index (profile page) @login-required
 @app.route("/")
 def index():
-    if not session.get("username"):
-        return redirect("login.html")
-    return render_template("index.html")
+   return render_template("index.html")
  
  #app route login user 
-@app.route("/login", methods=["POST", "GET"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
 
     #forget any user_id
@@ -46,9 +48,9 @@ def login():
 
         session["user_id"] = rows[0]["id"]   
 
-        return redirect("index.html")
+        return redirect("/")
     else:
-    return render_template("login.html")
+        return render_template("login.html")
 
 
 #app route logout user
@@ -85,7 +87,7 @@ def register():
         new_user= db.execute("SELECT id FROM users WHERE username = :name", username=name)
         session["user_id"] = new_user[0]["id"]
         #redirect to login page
-        return redirect("/login")
+        return redirect("/")
         #else via GET redirect to register page
     else:
         return render_template("register.html")

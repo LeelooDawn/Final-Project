@@ -35,7 +35,10 @@
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#"
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="{{ url_for ('index') }}"
                 >Profile</a
               >
             </li>
@@ -46,7 +49,14 @@
               <a class="nav-link" href="#">Dish Ideas</a>
             </li>
           </ul>
-          <span class="navbar-text nav-link" href="#"> Register Here! </span>
+          <span class="navbar-text me-4 fw-bold"
+            ><a class="nav-link" href="{{ url_for ('login') }}"> Log In</a>
+          </span>
+          <span class="navbar-text"
+            ><a class="nav-link" href="{{ url_for ('register') }}">
+              Register Here!</a
+            >
+          </span>
         </div>
       </div>
     </nav>
