@@ -2,18 +2,13 @@ import os
 
 from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
-from flask-sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import text
 from werkzeug.security import check_password_hash, generate_password_hash
-
+import sqlite3
 
 app = Flask(__name__)
 
 #configure SQlite database
-db_name = 'potluck.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= True
-db = SQLAlchemy(app)
+db = sqlite3.connect("/potluck.db")
 
 #make sure API key is set
 

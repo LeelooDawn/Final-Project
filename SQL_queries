@@ -10,15 +10,19 @@ CREATE TABLE events (
 event_id INTEGER PRIMARY KEY, 
 date TEXT NOT NULL,
 time TEXT NOT NULL,
+dish_id INTEGER NOT NULL,
 FOREIGN KEY (dish_id)
     REFERENCES dish_type (dish_id)
 );
 
 CREATE TABLE dishes (
+dishes_id INTEGER PRIMARY KEY,
+dish TEXT NOT NULL,
+user_id INTEGER NOT NULL,
+dish_id INTEGER NOT NULL,
 FOREIGN KEY (user_id)
-    REFERENCES users (user_id),
+    REFERENCES users (id),
 FOREIGN KEY (dish_id)
-    REFERENCES  dish_type(dish_id),
-dish TEXT NOT NULL
+    REFERENCES  dish_type(dish_id)
 );
 
