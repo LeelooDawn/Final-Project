@@ -7,9 +7,6 @@ import sqlite3
 
 app = Flask(__name__)
 
-#configure SQlite database
-db = sqlite3.connect("/potluck.db")
-
 #make sure API key is set
 
 #configure session to use filesystem instead of signed cookies
@@ -20,6 +17,9 @@ Session(app)
 #app route index (profile page) @login-required
 @app.route("/")
 def index():
+#show profile of user
+#check if user has any events coming up - if not say "no events coming up - plan something here!"
+#api of recipes will show up at bottom
    return render_template("index.html")
  
  #app route login user 
@@ -36,7 +36,9 @@ def login():
         elif not request.form.get("password"):
             return ("Must Provide Password") 
         #query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        with sqlite3.connect("/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db") as con:
+            cur = con.cursor()
+            rows = cur.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
             return "Invalid username and/or password"
@@ -60,29 +62,35 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        name = request.form.get("username")
-        password = request.form.get("password")
-        email = request.form.get("email")
-        #validate if username, password, email are not blank
-        if not name:
-            return "Please enter a username"
-        elif not password:
-            return "Please enter a password"
-        elif not email:
-            return "Please enter your email" 
-
+        try:
+            username = request.form.get("username")
+            password = request.form.get("password")
+            email = request.form.get("email")
+            if not username:
+                return "Please enter username"
+            elif not password:
+                return "Please enter password"
+            elif not email:
+                return "Please enter email"
         #generate hash of password
-        hash = generate_password_hash(password)
-        #if username is taken return apology
-        if db.execute("SELECT username FROM users WHERE username = :name", username=name):
-            return "Username already exists"
+            hash = generate_password_hash(password)
+    
         #enter new user into database
-        db.execute("INSERT INTO users (name, hash) VALUES (?,?)", name, hash)
+            with sqlite3.connect("/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db") as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
         #activate new session for user
-        new_user= db.execute("SELECT id FROM users WHERE username = :name", username=name)
-        session["user_id"] = new_user[0]["id"]
-        #redirect to login page
-        return redirect("/")
+                con.commit()
+                message = "User successfully added"
+                #new_user= cur.execute("SELECT id FROM users WHERE username = :username", username=username)
+                #session["user_id"] = new_user[0]["id"]
+        except:
+            con.rollback()
+            message = "Error in Inserting User"
+        #redirect to index page
+        finally:
+            return redirect("/login")
+            con.close()
         #else via GET redirect to register page
     else:
         return render_template("register.html")
