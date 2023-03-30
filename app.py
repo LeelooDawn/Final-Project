@@ -37,10 +37,12 @@ def login():
             return ("Must Provide Password") 
         #query database for username
         with sqlite3.connect("/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db") as con:
+            con.row_factory = sqlite3.Row
             cur = con.cursor()
             rows = con.execute("SELECT * FROM users WHERE username = ?", (username,))
+            row = rows.fetchone()[0]
         
-        return render_template("/", username=username)
+        return render_template("/")
     else:
         return render_template("login.html")
 
@@ -73,16 +75,10 @@ def register():
         #enter new user into database
             with sqlite3.connect("/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db") as con:
                 cur = con.cursor()
-                statement = f"SELECT * FROM users WHERE username='{username}';"
-                cur.execute(statement)
-                data=cur.fetchone()
-                if data:
-                    return render_template("error.html")
-                else:
-                    if not data:
-                        cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
-                        con.commit()
-                        con.close()
+                cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
+        #activate new session for user
+                con.commit()
+                message = "User successfully added"
                 #activate new session for user
                 #new_user= cur.execute("SELECT id FROM users WHERE username = :username", username=username)
                 #session["user_id"] = new_user[0]["id"]
