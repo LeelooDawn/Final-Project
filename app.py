@@ -31,20 +31,21 @@ def login():
 
     #if form is submitted via post
     if request.method == "POST":
-        if not request.form.get("username"):
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if not username:
             return ("Must Provide Username")
-        elif not request.form.get("password"):
+        elif not password:
             return ("Must Provide Password") 
         #query database for username
         with sqlite3.connect("/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db") as con:
-            cur = con.cursor()
-            rows = cur.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+            con.row_factory = sqlite3.Row
+            rows = con.execute("SELECT * FROM users WHERE username = ?", (username,))
+            row = rows.fetchone()[0]
 
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return "Invalid username and/or password"
-
-        session["user_id"] = rows[0]["id"]   
-
+            #if row != 1 or not check_password_hash(row[0]["hash"], (password,)):
+                #return "invalid username and/or password"  
         return redirect("/")
     else:
         return render_template("login.html")
