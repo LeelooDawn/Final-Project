@@ -18,6 +18,7 @@ Session(app)
 @app.route("/")
 def index():
 #show profile of user
+
 #check if user has any events coming up - if not say "no events coming up - plan something here!"
 #api of recipes will show up at bottom
    return render_template("index.html")
@@ -25,10 +26,6 @@ def index():
  #app route login user 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
-    #forget any user_id
-    session.clear()
-
     #if form is submitted via post
     if request.method == "POST":
         username = request.form.get("username")
@@ -40,13 +37,10 @@ def login():
             return ("Must Provide Password") 
         #query database for username
         with sqlite3.connect("/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db") as con:
-            con.row_factory = sqlite3.Row
+            cur = con.cursor()
             rows = con.execute("SELECT * FROM users WHERE username = ?", (username,))
-            row = rows.fetchone()[0]
-
-            #if row != 1 or not check_password_hash(row[0]["hash"], (password,)):
-                #return "invalid username and/or password"  
-        return redirect("/")
+        
+        return render_template("/", username=username)
     else:
         return render_template("login.html")
 
@@ -79,15 +73,21 @@ def register():
         #enter new user into database
             with sqlite3.connect("/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db") as con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
-        #activate new session for user
-                con.commit()
-                message = "User successfully added"
+                statement = f"SELECT * FROM users WHERE username='{username}';"
+                cur.execute(statement)
+                data=cur.fetchone()
+                if data:
+                    return render_template("error.html")
+                else:
+                    if not data:
+                        cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
+                        con.commit()
+                        con.close()
+                #activate new session for user
                 #new_user= cur.execute("SELECT id FROM users WHERE username = :username", username=username)
                 #session["user_id"] = new_user[0]["id"]
         except:
             con.rollback()
-            message = "Error in Inserting User"
         #redirect to index page
         finally:
             return redirect("/login")
