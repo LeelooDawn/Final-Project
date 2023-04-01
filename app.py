@@ -61,25 +61,36 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        username = request.form.get("username"),
-        password = request.form.get("password"),
-        email = request.form.get("email") 
-   
+        try:
+            username = request.form.get("username"),
+            password = request.form.get("password"),
+            email = request.form.get("email") 
+        
+            if not username:
+                return render_template("error.html", error="no username")
+            elif not password:
+                return render_template("error.html", error="no password")
+            elif not email:
+                return render_template("error.html", error="no email") 
         #generate hash of password
-        hash = generate_password_hash(password)
-        add_user(username, hash, email)
-        return render_template("index.html", username=username)
+            hashed_pw = generate_password_hash(password)
+        #enter new user into database
+            with sqlite3.connect(db) as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hashed_pw, email))
+                con.commit()
+        except:
+            con.rollback()
+            return render_template("error.html", error="error registering user")
+        finally:
+            return render_template("index.html", username=username)
+            con.close()
+
     else:
         return render_template("register.html")
 
-        #enter new user into database
-def add_user(username, hash, email):
-    con = sqlite3.connect(db)
-    cur = con.cursor()
-    insert_user = ("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
-    cur.execute(insert_user)
-    con.commit()
-    con.close()
+        
+    
                 #activate new session for user
                 #new_user= cur.execute("SELECT id FROM users WHERE username = :username", username=username)
                 #session["user_id"] = new_user[0]["id]
