@@ -32,20 +32,26 @@ def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-
+        error="Please enter username/password"
         if not username:
-            return render_template("error.html", error="no username")
+            return render_template("error.html", error=error)
         elif not password:
-            return render_template("error.html", error="no password") 
+            return render_template("error.html", error=error) 
         #query database for username
         with sqlite3.connect(db) as con:
             cur = con.cursor()
             query = ("SELECT * FROM users WHERE username = ?", (username,))
             cur.execute(*query)
             user = cur.fetchone()
-        
-        return render_template("index.html", username=user[1])
-    else:
+        if user:
+            session["loggedin"] = True
+            session["id"]= user[0]
+            session["username"] = user[1]
+            return render_template("index.html", username=user[1])
+        else:
+            err="Incorrect username/password"
+            return render_template("error.html", error=err)
+    elif request.method == "GET":
         return render_template("login.html")
 
 
@@ -73,25 +79,24 @@ def register():
             elif not email:
                 return render_template("error.html", error="no email") 
         #generate hash of password
-            hashed_pw = generate_password_hash(password)
+            hash = generate_password_hash(password)
         #enter new user into database
             with sqlite3.connect(db) as con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hashed_pw, email))
+                cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
                 con.commit()
         except:
             con.rollback()
             return render_template("error.html", error="error registering user")
         finally:
+            #activate new session for user
             return render_template("index.html", username=username)
             con.close()
 
     else:
         return render_template("register.html")
 
-        
-    
-                #activate new session for user
+                
                 #new_user= cur.execute("SELECT id FROM users WHERE username = :username", username=username)
                 #session["user_id"] = new_user[0]["id]
 if __name__ == '__main__':
