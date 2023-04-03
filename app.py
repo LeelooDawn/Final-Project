@@ -14,20 +14,29 @@ db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
 #configure session to use filesystem instead of signed cookies
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=5)
+app.config["SECRET_KEY"] = config.SECRET_KEY
+sess = Session()
+sess.init.app(app)
 
 #app route index (profile page)
 @app.route("/")
 def index():
 #show profile of user
-
+    if "username" in session:
+        username = session["username"]
+            return render_template("index.html")    
 #check if user has any events coming up - if not say "no events coming up - plan something here!"
 #api of recipes will show up at bottom
-   return render_template("index.html")
+    else: 
+        return render_template("login.html")
+   
  
  #app route login user 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    #forget any user
+    session.pop("username", None)
     #if form is submitted via post
     if request.method == "POST":
         username = request.form.get("username")
@@ -61,7 +70,7 @@ def login():
 @app.route("/logout")
 def logout():
     #forget any user_id
-	session.clear()
+	session.pop("username", None)
     #redirect user to log in form
 	return redirect("login.html")
 
