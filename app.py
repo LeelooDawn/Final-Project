@@ -43,11 +43,13 @@ def login():
             query = ("SELECT * FROM users WHERE username = ?", (username,))
             cur.execute(*query)
             user = cur.fetchone()
+        #if user is in database, start a session for user
         if user:
             session["loggedin"] = True
             session["id"]= user[0]
             session["username"] = user[1]
             return render_template("index.html", username=user[1])
+        #else it is incorrect and try again
         else:
             err="Incorrect username/password"
             return render_template("error.html", error=err)
@@ -71,13 +73,13 @@ def register():
             username = request.form.get("username"),
             password = request.form.get("password"),
             email = request.form.get("email") 
-        
+            error = "Please enter your registration information again"
             if not username:
-                return render_template("error.html", error="no username")
+                return render_template("error.html", error=error)
             elif not password:
-                return render_template("error.html", error="no password")
-            elif not email:
-                return render_template("error.html", error="no email") 
+                return render_template("error.html", error=error)
+            elif '@' not in email:
+                return render_template("error.html", error=error) 
         #generate hash of password
             hash = generate_password_hash(password)
         #enter new user into database
@@ -85,15 +87,20 @@ def register():
                 cur = con.cursor()
                 cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
                 con.commit()
+                new_user = cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+                new_user = cur.fetchone()
+            #start new session for user
+            if new_user:
+                session["loggedin"] = True
+                session["id"]= new_user[0]
+                session["username"] = new_user[1]
         except:
-            con.rollback()
-            return render_template("error.html", error="error registering user")
+            err = "Error registering user, please try again"
+            return render_template("error.html", error=err)
         finally:
-            #activate new session for user
-            return render_template("index.html", username=username)
+            return render_template("index.html", username=session["username"])
             con.close()
-
-    else:
+    elif request.method == "GET":
         return render_template("register.html")
 
                 
