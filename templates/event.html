@@ -1,0 +1,60 @@
+{% extends "layout.html" %} {% block title %} Event Planning {% endblock %} {%
+block main %}
+<div class="mb-4">
+  <h1>Plan your next event!</h1>
+</div>
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Event Title</label>
+  <input
+    type="text"
+    class="form-control"
+    id="eventTitle"
+    placeholder="ex: Pizza Party Potluck"
+  />
+</div>
+<div class="mb-3">
+  <label for="party" class="form-label">Enter a date and time:</label>
+  <input
+    id="partyDate"
+    type="datetime-local"
+    name="partydate"
+    class="form-control"
+  />
+</div>
+<div class="mb-3">
+  <label for="exampleFormControlTextarea1" class="form-label"
+    >Tell us a little more about the party</label
+  >
+  <textarea
+    class="form-control"
+    id="moreInfo"
+    rows="3"
+    placeholder="What is your theme?"
+  ></textarea>
+</div>
+<select class="form-select mb-3" aria-label="Default select example">
+  <option selected>How Many Entrees do you need?</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+<select class="form-select mb-3" aria-label="Default select example">
+  <option selected>How many side-dishes do you need?</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+<select class="form-select mb-3" aria-label="Default select example">
+  <option selected>How many desserts do you need?</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+<select class="form-select mb-3" aria-label="Default select example">
+  <option selected>How many beverages do you need?</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+
+{% endblock %}

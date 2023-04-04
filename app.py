@@ -14,10 +14,8 @@ db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
 #configure session to use filesystem instead of signed cookies
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=5)
-app.config["SECRET_KEY"] = config.SECRET_KEY
-sess = Session()
-sess.init.app(app)
+Session(app)
+
 
 #app route index (profile page)
 @app.route("/")
@@ -25,7 +23,7 @@ def index():
 #show profile of user
     if "username" in session:
         username = session["username"]
-            return render_template("index.html")    
+        return render_template("index.html")    
 #check if user has any events coming up - if not say "no events coming up - plan something here!"
 #api of recipes will show up at bottom
     else: 
@@ -41,6 +39,7 @@ def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
+        #if there are blanks in either form show error
         error="Please enter username/password"
         if not username:
             return render_template("error.html", error=error)
@@ -72,7 +71,7 @@ def logout():
     #forget any user_id
 	session.pop("username", None)
     #redirect user to log in form
-	return redirect("login.html")
+	return redirect("/")
 
 #app route register user 
 @app.route("/register", methods=["GET", "POST"])
@@ -82,6 +81,7 @@ def register():
             username = request.form.get("username"),
             password = request.form.get("password"),
             email = request.form.get("email") 
+            #if any field is blank show error
             error = "Please enter your registration information again"
             if not username:
                 return render_template("error.html", error=error)
@@ -98,23 +98,24 @@ def register():
                 con.commit()
                 new_user = cur.execute("SELECT * FROM users WHERE username = ?", (username,))
                 new_user = cur.fetchone()
+                username1 = cur.fetchone()[1]
             #start new session for user
             if new_user:
                 session["loggedin"] = True
-                session["id"]= new_user[0]
-                session["username"] = new_user[1]
+                session["id"]= new_user[0]["id"]
+                session["username"] = new_user[1]["username"]
+                return render_template("index.html", username=username1)
+                con.close()
         except:
-            err = "Error registering user, please try again"
-            return render_template("error.html", error=err)
-        finally:
-            return render_template("index.html", username=session["username"])
-            con.close()
+            err = "Error registering user"
+            return render_template("error.html", error=err)     
     elif request.method == "GET":
         return render_template("register.html")
 
-                
-                #new_user= cur.execute("SELECT id FROM users WHERE username = :username", username=username)
-                #session["user_id"] = new_user[0]["id]
+@app.route("/event")
+def event():
+ return render_template("event.html")
+
 if __name__ == '__main__':
     app.run()  
 

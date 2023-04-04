@@ -26,3 +26,6 @@ FOREIGN KEY (dish_id)
     REFERENCES  dish_type(dish_id)
 );
 
+INSERT INTO users
+(username, hash, email)
+VALUES ("test", "tester", "testeremail");
