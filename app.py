@@ -21,13 +21,13 @@ Session(app)
 @app.route("/")
 def index():
 #show profile of user
-    if "username" in session:
-        username = session["username"]
-        return render_template("index.html")    
+    if not session.get("username"):
+        return redirect("/login")
+       
+    return render_template("index.html")    
 #check if user has any events coming up - if not say "no events coming up - plan something here!"
 #api of recipes will show up at bottom
-    else: 
-        return render_template("login.html")
+
    
  
  #app route login user 

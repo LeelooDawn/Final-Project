@@ -43,16 +43,18 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for ('event') }}">Plan Your Event</a>
+              <a class="nav-link" href="{{ url_for ('event') }}"
+                >Plan Your Event</a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Dish Ideas</a>
             </li>
           </ul>
-          <span class="navbar-text me-4 fw-bold"
-            ><a class="nav-link" href="{{ url_for ('logout') }}"> Log Out</a>
+
           <span class="navbar-text me-4 fw-bold"
             ><a class="nav-link" href="{{ url_for ('login') }}"> Log In</a>
+            <a class="nav-link" href="{{ url_for ('logout') }}"> Log Out</a>
           </span>
           <span class="navbar-text"
             ><a class="nav-link" href="{{ url_for ('register') }}">

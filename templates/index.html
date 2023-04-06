@@ -1,12 +1,12 @@
 {% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
 main %}
 <div class="container">
-  <h1><strong>Welcome {{ username }}!</strong></h1>
+  <h1><strong>Welcome {{ session.username }}!</strong></h1>
 </div>
 <div class="container">
   <p>You have not RSVP'd to any events yet</p>
-  <button type="submit" class="btn btn-info" href="{{ url_for ('event') }}">
-    Create your event here!
+  <button type="submit" class="btn btn-info">
+    <a href="{{ url_for ('event') }}">Create your event here!</a>
   </button>
 </div>
 <div class="container">
