@@ -1,10 +1,11 @@
 {% extends "layout.html" %} {% block title %} Event Planning {% endblock %} {%
 block main %}
 <div class="mb-4">
-  <h1>Plan your next event!</h1>
+  <h1>Plan your next Potluck!</h1>
 </div>
 <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">Event Title</label>
+  <form action="/event" method="post">
+  <label for="exampleFormControlInput1" class="form-label">Potluck Title</label>
   <input
     type="text"
     class="form-control"
@@ -32,29 +33,14 @@ block main %}
     placeholder="What is your theme?"
   ></textarea>
 </div>
-<select class="form-select mb-3" aria-label="Default select example">
-  <option selected>How Many Entrees do you need?</option>
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
-</select>
-<select class="form-select mb-3" aria-label="Default select example">
-  <option selected>How many side-dishes do you need?</option>
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
-</select>
-<select class="form-select mb-3" aria-label="Default select example">
-  <option selected>How many desserts do you need?</option>
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
-</select>
-<select class="form-select mb-3" aria-label="Default select example">
-  <option selected>How many beverages do you need?</option>
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
-</select>
+</form>
+<h4>How many of each dish do you need?</h4>
+<form method="post" action="{{ url_for('dish_amounts') }}">
+  {% for dish, value in dishes.items() %}
+   <label for="{{ dish }}">{{ dish }}:</label>
+   <input type = "number" id="{{ dish }}" name="{{ dish }}" value="{{ value }}"><br>
+   {% endfor %}
+   <input type="submit" value="Set values">
+</form>
 
 {% endblock %}
