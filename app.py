@@ -9,13 +9,13 @@ app = Flask(__name__)
 
 #configure SQL database
 db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
+
 #make sure API key is set
 
 #configure session to use filesystem instead of signed cookies
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-
 
 #app route index (profile page)
 @app.route("/")
@@ -106,8 +106,8 @@ def register():
                 session["username"] = new_user[1]["username"]
                 return render_template("index.html", username=username1)
                 con.close()
-        except:
-            err = "Error registering user"
+        except Exception as e:
+            err = f"Error registering user: {e}"
             return render_template("error.html", error=err)     
     elif request.method == "GET":
         return render_template("register.html")
