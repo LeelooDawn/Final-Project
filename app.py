@@ -78,8 +78,8 @@ def logout():
 def register():
     if request.method == "POST":
         try:
-            username = request.form.get("username"),
-            password = request.form.get("password"),
+            username = request.form.get("username")
+            password = request.form.get("password")
             email = request.form.get("email") 
             #if any field is blank show error
             error = "Please enter your registration information again"
@@ -96,16 +96,17 @@ def register():
                 cur = con.cursor()
                 cur.execute("INSERT INTO users (username, hash, email) VALUES (?,?,?)", (username, hash, email))
                 con.commit()
-                new_user = cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+                #now select the user you just entered as new_user
+                new_user = cur.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),))
                 new_user = cur.fetchone()
-                username1 = cur.fetchone()[1]
+
             #start new session for user
-            if new_user:
-                session["loggedin"] = True
-                session["id"]= new_user[0]["id"]
-                session["username"] = new_user[1]["username"]
-                return render_template("index.html", username=username1)
-                con.close()
+                if new_user:
+                    session["loggedin"] = True
+                    session["id"]= new_user[0]
+                    session["username"] = new_user[1]
+                    return render_template("index.html", username=new_user[1])
+                    con.close()
         except Exception as e:
             err = f"Error registering user: {e}"
             return render_template("error.html", error=err)     
@@ -114,6 +115,8 @@ def register():
 
 @app.route("/event")
 def event():
+
+
  return render_template("event.html")
 
 if __name__ == '__main__':
