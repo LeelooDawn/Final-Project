@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+import requests
 import sqlite3
 
 app = Flask(__name__)
@@ -116,7 +117,7 @@ def register():
         return render_template("register.html")
 
 #app route create event
-@app.route("/event")
+@app.route("/event", methods=["GET", "POST"])
 def event():
 #insert event date, time, theme/title into database
 #choose how many different dishes they need for the event using a @dish_amounts function
