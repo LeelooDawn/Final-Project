@@ -11,10 +11,9 @@ app = Flask(__name__)
 #configure SQL database
 db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
 
-#define dish dictionary
-dishes = {'Entrees': None, "Side-Dishes": None, "Desserts": None, "Beverages": None, "Dishware": None}
-
 #make sure API key is set
+#if not os.environ.get("API_KEY"):
+    #raise RuntimeError("API_KEY not set")
 
 #configure session to use filesystem instead of signed cookies
 app.config["SESSION_PERMANENT"] = False
@@ -131,19 +130,50 @@ def event():
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
     #contact API 
-    api_key = os.environ.get("API_KEY")
-    search = request.form.get("search")
-    url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
-    querystring={"prefix": search }
-    headers= {
-        'x-rapidapi-key': api_key, 
-        'x-rapidapi-host': "tasty.p.rapidapi.com"
-    }
+    if request.method == "POST":
+        search = request.form.get("search")
+        url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
 
-    response = requests.request("POST", url, headers=headers, params=querystring)
-    msg = response.text
-    return render_template("recipes.html", msg=msg)
+        querystring = {"prefix": search}
 
+        headers = {
+	        "X-RapidAPI-Key": "f66876ee1emshc8619abd70c59f0p150fbejsne5d7073b1edc",
+	        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+        }
+
+        response = requests.request("GET", url, headers=headers, params=querystring)  
+        #parse response
+        response.raise_for_status()
+        results = []
+        for item in response.json()["results"]:
+            display = item["display"]
+            ingredient = item["type"]
+            search_value = item["search_value"]
+            results.append({"display" : display, "type": ingredient, "search_value":search_value})
+
+        return render_template("recipes.html", results=results)
+    else:
+        url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
+
+        querystring = {"prefix":"chicken soup"}
+
+        headers = {
+	        "X-RapidAPI-Key": "f66876ee1emshc8619abd70c59f0p150fbejsne5d7073b1edc",
+	        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+        }
+
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        response.raise_for_status()
+        results = []
+        for item in response.json()["results"]:
+            display = item["display"]
+            ingredient = item["type"]
+            search_value = item["search_value"]
+            results.append({"display" : display, "type": ingredient, "search_value":search_value})
+
+        return render_template("recipes.html", results=results)
+        
+        
 if __name__ == '__main__':
     app.run()  
 

@@ -15,4 +15,16 @@ main %}
     Search
   </button>
 </form>
-{{ msg }} {% endblock %}
+<div class="container">
+  <h2>Recipes</h2>
+  <ul>
+    {% for item in results %}
+    <li>
+      <strong>{{ item["display"] }}</strong><br />
+      {{ item["type"] }}<br />
+      {{ item["search_value"] }}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
