@@ -128,9 +128,21 @@ def event():
    
     return render_template("event.html")
 
-@app.route("/recipes")
+@app.route("/recipes", methods=["GET", "POST"])
 def recipes():
-    return render_template("recipes.html")
+    #contact API 
+    api_key = os.environ.get("API_KEY")
+    search = request.form.get("search")
+    url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
+    querystring={"prefix": search }
+    headers= {
+        'x-rapidapi-key': api_key, 
+        'x-rapidapi-host': "tasty.p.rapidapi.com"
+    }
+
+    response = requests.request("POST", url, headers=headers, params=querystring)
+    msg = response.text
+    return render_template("recipes.html", msg=msg)
 
 if __name__ == '__main__':
     app.run()  
