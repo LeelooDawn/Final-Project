@@ -17,14 +17,13 @@ main %}
 </form>
 <div class="container">
   <h2>Recipes</h2>
-  <ul>
-    {% for item in results %}
-    <li>
-      <strong>{{ item["display"] }}</strong><br />
-      {{ item["type"] }}<br />
-      {{ item["search_value"] }}
-    </li>
+  <div>
+    {% for recipe in recipes %}
+    <div>
+      <span>{{ recipe.image }}</span> <span>{{ recipe.ingredients }}</span>
+      <span>{{ recipe.dish_type }}</span> <span>{{ recipe.url }}</span>
+    </div>
     {% endfor %}
-  </ul>
+  </div>
 </div>
 {% endblock %}

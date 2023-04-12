@@ -4,6 +4,7 @@ from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 import requests
+from py_edamam import PyEdamam
 import sqlite3
 
 app = Flask(__name__)
@@ -12,8 +13,7 @@ app = Flask(__name__)
 db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
 
 #make sure API key is set
-#if not os.environ.get("API_KEY"):
-    #raise RuntimeError("API_KEY not set")
+
 
 #configure session to use filesystem instead of signed cookies
 app.config["SESSION_PERMANENT"] = False
@@ -130,48 +130,21 @@ def event():
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
     #contact API 
+    e = PyEdamam(recipes_appid = '3d317b12',
+recipes_appkey='6dde6a8feafb2cf9a43ed4bfcdb896f5')
+
     if request.method == "POST":
         search = request.form.get("search")
-        url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
-
-        querystring = {"prefix": search}
-
-        headers = {
-	        "X-RapidAPI-Key": "f66876ee1emshc8619abd70c59f0p150fbejsne5d7073b1edc",
-	        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
-        }
-
-        response = requests.request("GET", url, headers=headers, params=querystring)  
-        #parse response
-        response.raise_for_status()
-        results = []
-        for item in response.json()["results"]:
-            display = item["display"]
-            ingredient = item["type"]
-            search_value = item["search_value"]
-            results.append({"display" : display, "type": ingredient, "search_value":search_value})
-
-        return render_template("recipes.html", results=results)
+        for recipe in e.search_recipe(search):
+            ingredients = recipe.ingredients
+            image = recipe.image
+            dish_type = recipe.dish_type
+            url = recipe.url
+        
+        return render_template("recipes.html", ingredients=ingredients, image=image, dish_type=dish_type, url=url)
     else:
-        url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
-
-        querystring = {"prefix":"chicken soup"}
-
-        headers = {
-	        "X-RapidAPI-Key": "f66876ee1emshc8619abd70c59f0p150fbejsne5d7073b1edc",
-	        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
-        }
-
-        response = requests.request("GET", url, headers=headers, params=querystring)
-        response.raise_for_status()
-        results = []
-        for item in response.json()["results"]:
-            display = item["display"]
-            ingredient = item["type"]
-            search_value = item["search_value"]
-            results.append({"display" : display, "type": ingredient, "search_value":search_value})
-
-        return render_template("recipes.html", results=results)
+        recipe = e.search_recipe("chicken soup")
+        return render_template("recipes.html", recipe=recipe)
         
         
 if __name__ == '__main__':
