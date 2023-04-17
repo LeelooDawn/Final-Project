@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block title %} Register {% endblock %} {% block
+{% extends "layout.html" %} {% block title %} Dish Ideas {% endblock %} {% block
 main %}
 <div class="container">
   <h1>Search For Recipe Ideas Here!</h1>
@@ -15,15 +15,20 @@ main %}
     Search
   </button>
 </form>
+<h2>Recipes</h2>
 <div class="container">
-  <h2>Recipes</h2>
-  <div>
-    {% for recipe in recipes %}
-    <div>
-      <span>{{ recipe.image }}</span> <span>{{ recipe.ingredients }}</span>
-      <span>{{ recipe.dish_type }}</span> <span>{{ recipe.url }}</span>
+  {% for row in recipes|batch(3) %}
+  <div class="row">
+    {% for column in row %}
+    <div class="col border border-info mb-3">
+      <div>{{ column.recipe.label }}</div>
+      <div>{{ column.recipe.image }}</div>
+      <div>{{ column.recipe.dish_type }}</div>
+      <div>{{ column.recipe.url }}</div>
     </div>
     {% endfor %}
   </div>
+  {% endfor %}
 </div>
+
 {% endblock %}

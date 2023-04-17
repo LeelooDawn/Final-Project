@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 import requests
-from py_edamam import PyEdamam
+from py_edamam import Edamam
 import sqlite3
 
 app = Flask(__name__)
@@ -130,21 +130,25 @@ def event():
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
     #contact API 
-    e = PyEdamam(recipes_appid = '3d317b12',
-recipes_appkey='6dde6a8feafb2cf9a43ed4bfcdb896f5')
+    recipe = Edamam(
+        recipes_appid=os.environ.get('APP_ID'),
+        recipes_appkey=os.environ.get('APP_KEY'),
+    )
 
     if request.method == "POST":
-        search = request.form.get("search")
-        for recipe in e.search_recipe(search):
-            ingredients = recipe.ingredients
-            image = recipe.image
-            dish_type = recipe.dish_type
-            url = recipe.url
+        try:
+            search = request.form.get("search")
+            recipes = recipe.search_recipe(search)
+            print(recipes)
+            return render_template("recipes.html", recipes=recipes)
+        except Exception as e:
+            err = f"Error in search: {e}"
+            return render_template("error.html", error=err)
         
-        return render_template("recipes.html", ingredients=ingredients, image=image, dish_type=dish_type, url=url)
     else:
-        recipe = e.search_recipe("chicken soup")
-        return render_template("recipes.html", recipe=recipe)
+        recipes = recipe.search_recipe("chicken soup")
+        print(recipes)
+        return render_template("recipes.html", recipes=recipes)
         
         
 if __name__ == '__main__':
