@@ -17,16 +17,24 @@ main %}
 </form>
 <h2>Recipes</h2>
 <div class="container">
-  {% for row in recipes|batch(3) %}
+  {% for recipe in recipe_list %}
   <div class="row">
-    {% for column in row %}
-    <div class="col border border-info mb-3">
-      <div>{{ column.recipe.label }}</div>
-      <div>{{ column.recipe.image }}</div>
-      <div>{{ column.recipe.dish_type }}</div>
-      <div>{{ column.recipe.url }}</div>
+    <div class="col-md-6 border border-info mb-3">
+      <div class="card" style="width: 18rem">
+        <img
+          class="card-img-top"
+          src="{{ recipe['image'] }}"
+          alt="{{ recipe['label'] }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ recipe['label'] }}</h5>
+          <p class="card-text">source: {{ recipe['source'] }}</p>
+          <a href="{{ recipe['url'] }}" target="_blank" class="btn btn-primary"
+            >Get Recipe</a
+          >
+        </div>
+      </div>
     </div>
-    {% endfor %}
   </div>
   {% endfor %}
 </div>

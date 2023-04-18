@@ -134,20 +134,28 @@ def recipes():
         recipes_appid=os.environ.get('APP_ID'),
         recipes_appkey=os.environ.get('APP_KEY'),
     )
-
+#if request method POST
     if request.method == "POST":
         try:
+            #get search text from user
             search = request.form.get("search")
-            recipes = recipe.search_recipe(search)
-            print(recipes)
-            return render_template("recipes.html", recipes=recipes)
+            hits = recipe.search_recipe(search)
+            recipe_list = []
+            for hit in hits:
+                recipe = hit['recipe']
+                label = recipe['label']
+                source = recipe['source']
+                url = recipe['url']
+                image = recipe['image']
+                recipe_list.append({'recipe': recipe, 'label': label, 'image':image, 'source': source, 'url':url})
+            return render_template("recipes.html", recipe_list=recipe_list)
         except Exception as e:
             err = f"Error in search: {e}"
             return render_template("error.html", error=err)
         
     else:
         recipes = recipe.search_recipe("chicken soup")
-        print(recipes)
+       
         return render_template("recipes.html", recipes=recipes)
         
         
