@@ -18,24 +18,27 @@ main %}
 <h2>Recipes</h2>
 
 <div class="row">
-  {% for recipe in recipe_list %}
-  <div class="col-md-6 mb-3">
-    <div class="card" style="width: 18rem">
-      <img
-        class="card-img-top"
-        src="{{ recipe['image'] }}"
-        alt="{{ recipe['label'] }}"
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{ recipe['label'] }}</h5>
-        <p class="card-text">source: {{ recipe['source'] }}</p>
-        <a href="{{ recipe['url'] }}" target="_blank" class="btn btn-primary"
-          >Get Recipe</a
-        >
+  {% for recipe in recipe_list %} {% if loop.index0 % 4 == 0 %}
+  <div class="row">
+    {% endif %}
+    <div class="col-md-3 mb-3">
+      <div class="card" style="width: 18rem">
+        <img
+          class="card-img-top"
+          src="{{ recipe['image'] }}"
+          alt="{{ recipe['label'] }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ recipe['label'] }}</h5>
+          <p class="card-text">source: {{ recipe['source'] }}</p>
+          <a href="{{ recipe['url'] }}" target="_blank" class="btn btn-primary"
+            >Get Recipe</a
+          >
+        </div>
       </div>
     </div>
+    {% if loop.index0 % 4 == 3 or loop.last %}
   </div>
-  {% if loop.index is divisibleby 2 %}
+  {% endif %} {% endfor %}
 </div>
-<div class="row">{% endif %} {% endfor %}</div>
 {% endblock %}
