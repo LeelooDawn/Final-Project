@@ -16,27 +16,26 @@ main %}
   </button>
 </form>
 <h2>Recipes</h2>
-<div class="container">
+
+<div class="row">
   {% for recipe in recipe_list %}
-  <div class="row">
-    <div class="col-md-6 border border-info mb-3">
-      <div class="card" style="width: 18rem">
-        <img
-          class="card-img-top"
-          src="{{ recipe['image'] }}"
-          alt="{{ recipe['label'] }}"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ recipe['label'] }}</h5>
-          <p class="card-text">source: {{ recipe['source'] }}</p>
-          <a href="{{ recipe['url'] }}" target="_blank" class="btn btn-primary"
-            >Get Recipe</a
-          >
-        </div>
+  <div class="col-md-6 mb-3">
+    <div class="card" style="width: 18rem">
+      <img
+        class="card-img-top"
+        src="{{ recipe['image'] }}"
+        alt="{{ recipe['label'] }}"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ recipe['label'] }}</h5>
+        <p class="card-text">source: {{ recipe['source'] }}</p>
+        <a href="{{ recipe['url'] }}" target="_blank" class="btn btn-primary"
+          >Get Recipe</a
+        >
       </div>
     </div>
   </div>
-  {% endfor %}
+  {% if loop.index is divisibleby 2 %}
 </div>
-
+<div class="row">{% endif %} {% endfor %}</div>
 {% endblock %}
