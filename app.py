@@ -139,24 +139,22 @@ def recipes():
         try:
             #get search text from user
             search = request.form.get("search")
-            hits = recipe.search_recipe(search)
+            hits = recipe.search_recipe(search)['hits']
             recipe_list = []
             for hit in hits:
-                recipe = hit['recipe']
-                label = recipe['label']
-                source = recipe['source']
-                url = recipe['url']
-                image = recipe['image']
-                recipe_list.append({'recipe': recipe, 'label': label, 'image':image, 'source': source, 'url':url})
+                r = hit['recipe']
+                label = r['label']
+                source = r['source']
+                url = r['url']
+                image = r['image']
+                recipe_list.append({'recipe': r, 'label': label, 'image':image, 'source': source, 'url':url})
             return render_template("recipes.html", recipe_list=recipe_list)
         except Exception as e:
             err = f"Error in search: {e}"
             return render_template("error.html", error=err)
         
-    else:
-        recipes = recipe.search_recipe("chicken soup")
-       
-        return render_template("recipes.html", recipes=recipes)
+    else: 
+        return render_template("recipes.html")
         
         
 if __name__ == '__main__':
