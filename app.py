@@ -12,7 +12,7 @@ app = Flask(__name__)
 #configure SQL database
 db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
 
-#make sure API key is set
+#make sure API key is set in server start
 
 
 #configure session to use filesystem instead of signed cookies
@@ -118,14 +118,11 @@ def register():
 #app route create event
 @app.route("/event", methods=["GET", "POST"])
 def event():
-#insert event date, time, theme/title into database
-#choose how many different dishes they need for the event using a @dish_amounts function
-#render a html that has the confirmation information as well as space to enter emails to send to friends
-#confirm and send emails
-
-#dish_amounts function
+# USER CREATES EVENT BY ENTERING INFORMATION INTO EVENT TABLE
    
     return render_template("event.html")
+
+#APP ROUTE - CONFIRM EVENT INFORAMTION & SEND INVITATIONS
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
