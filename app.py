@@ -119,14 +119,41 @@ def register():
 @app.route("/event", methods=["GET", "POST"])
 def event():
 # USER CREATES EVENT BY ENTERING INFORMATION INTO EVENT TABLE
-   
-    return render_template("event.html")
+    #create dishes dictionary 
+    dishes = {"entree": None, "side-dish": None, "dessert": None, "beverage": None, "dishware": None }
+
+    user_id = session.get("user_id")
+    if request.method == "POST":
+        event_title = request.form.get("eventtitle")
+        event_theme = request.form.get("eventtheme")
+        datetime = request.form.get("datetime")
+        event_location = request.form.get("eventlocation")
+        #make sure no fields are left black
+        error = "All fields are required"
+        if not event_title or event_theme or datetime or event_location:
+            return render_template ("error.html", error=error)
+        #add event to database
+        with sqlite.connect(db) as con:
+            cur = con.cursor() 
+            cur.execute("INSERT INTO events (event_name, event_date_time, event_location, event_theme, user_id) VALUES (?,?,?,?,?)", (event_title, datetime, event_location, event_theme, user_id))
+            con.commit() 
+        #user chooses how many dishes needed for event
+        dish_name = request.form("dish_name")
+        dish_count= int(request.form("dish_count"))
+        dishes[dish_name] = dish_count
+        #show new event in new_event html
+
+        return render_template("new_event.html")
+    else:
+        return render_template("event.html")
 
 #APP ROUTE - CONFIRM EVENT INFORAMTION & SEND INVITATIONS
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
     #contact API 
+    user_id = session.get("user_id")
+
     recipe = Edamam(
         recipes_appid=os.environ.get('APP_ID'),
         recipes_appkey=os.environ.get('APP_KEY'),

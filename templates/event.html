@@ -1,46 +1,58 @@
 {% extends "layout.html" %} {% block title %} Event Planning {% endblock %} {%
 block main %}
 <div class="mb-4">
-  <h1>Plan your next Potluck!</h1>
+  <h1>Plan your next Potluck Party!</h1>
 </div>
-<div class="mb-3">
-  <form action="/event" method="post">
-  <label for="exampleFormControlInput1" class="form-label">Potluck Title</label>
-  <input
-    type="text"
-    class="form-control"
-    id="eventTitle"
-    placeholder="ex: Pizza Party Potluck"
-  />
-</div>
-<div class="mb-3">
-  <label for="party" class="form-label">Enter a date and time:</label>
-  <input
-    id="partyDate"
-    type="datetime-local"
-    name="partydate"
-    class="form-control"
-  />
-</div>
-<div class="mb-3">
-  <label for="exampleFormControlTextarea1" class="form-label"
-    >Tell us a little more about the party</label
-  >
-  <textarea
-    class="form-control"
-    id="moreInfo"
-    rows="3"
-    placeholder="What is your theme?"
-  ></textarea>
-</div>
-</form>
-<h4>How many of each dish do you need?</h4>
-<form method="post" action="{{ url_for('dish_amounts') }}">
+<form action="/event" method="post">
+  <div class="mb-3">
+    <label for="eventtitle" class="form-label">Potluck Title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="eventtitle"
+      name="eventtitle"
+      placeholder="ex: Pizza Party Potluck"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="datetime" class="form-label">Enter a date and time:</label>
+    <input
+      id="datetime"
+      type="datetime-local"
+      name="datetime"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="eventtheme" class="form-label">Is there a Theme?</label>
+    <input
+      type="text"
+      class="form-control"
+      id="eventtheme"
+      name="eventtheme"
+      placeholder="Pie Day!"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="eventlocation" class="form-label">What is the location?</label>
+    <input
+      type="text"
+      class="form-control"
+      id="eventlocation"
+      name="eventlocation"
+      placeholder="The Office LunchRoom"
+    />
+  </div>
+  <h4>How many of each dish do you need?</h4>
   {% for dish, value in dishes.items() %}
-   <label for="{{ dish }}">{{ dish }}:</label>
-   <input type = "number" id="{{ dish }}" name="{{ dish }}" value="{{ value }}"><br>
-   {% endfor %}
-   <input type="submit" value="Set values">
+  <label for="{{ dish }}">{{ dish }}:</label>
+  <input
+    type="number"
+    id="{{ dish }}"
+    name="{{ dish }}"
+    value="{{ value }}"
+  /><br />
+  {% endfor %}
 </form>
-
+<input type="submit" value="Create Event" />
 {% endblock %}
