@@ -138,14 +138,13 @@ def event():
             cur.execute("INSERT INTO events (event_name, event_date_time, event_location, event_theme, user_id) VALUES (?,?,?,?,?)", (event_title, datetime, event_location, event_theme, user_id))
             con.commit() 
         #user chooses how many dishes needed for event
-        dish_name = request.form("dish_name")
-        dish_count= int(request.form("dish_count"))
-        dishes[dish_name] = dish_count
+        for key, value in dishes.items():
+            dishes[key] = int(request.form.get(key))
         #show new event in new_event html
 
-        return render_template("new_event.html")
+        return render_template("event.html", dishes=dishes)
     else:
-        return render_template("event.html")
+        return render_template("event.html", dishes=dishes )
 
 #APP ROUTE - CONFIRM EVENT INFORAMTION & SEND INVITATIONS
 
