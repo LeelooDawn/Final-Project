@@ -122,7 +122,6 @@ def event():
     #create dishes dictionary 
     dishes = {"entree": None, "side-dish": None, "dessert": None, "beverage": None, "dishware": None }
 
-    user_id = session.get("user_id")
     if request.method == "POST":
         event_title = request.form.get("eventtitle")
         event_theme = request.form.get("eventtheme")
@@ -130,13 +129,15 @@ def event():
         event_location = request.form.get("eventlocation")
         #make sure no fields are left black
         error = "All fields are required"
-        if not event_title or event_theme or datetime or event_location:
+        if not all(event_title, event_theme, datetime, event_location):
             return render_template ("error.html", error=error)
         #add event to database
-        with sqlite.connect(db) as con:
+        with sqlite3.connect(db) as con:
             cur = con.cursor() 
-            cur.execute("INSERT INTO events (event_name, event_date_time, event_location, event_theme, user_id) VALUES (?,?,?,?,?)", (event_title, datetime, event_location, event_theme, user_id))
-            con.commit() 
+            data = cur.execute("INSERT INTO events (event_name, event_date_time, event_location, event_theme, host_id) VALUES (?,?,?,?,?)", (event_title, datetime, event_location, event_theme, host_id))
+            print(data)
+            con.commit()
+            print(data)
         #user chooses how many dishes needed for event
         for key, value in dishes.items():
             dishes[key] = int(request.form.get(key))
@@ -146,7 +147,7 @@ def event():
     else:
         return render_template("event.html", dishes=dishes )
 
-#APP ROUTE - CONFIRM EVENT INFORAMTION & SEND INVITATIONS
+#APP ROUTE - CONFIRM EVENT INFORMATION & SEND INVITATIONS
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
