@@ -54,3 +54,12 @@ CREATE TABLE events (
 ALTER TABLE dishes
 ADD COLUMN rsvp_id INTEGER
 REFERENCES rsvp (rsvp_id);
+
+CREATE TABLE dishes_needed (
+    dishes_needed_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    amount_of_type INTEGER NOT NULL,
+    dish_type INTEGER NOT NULL,
+    event_id INTEGER NOT NULL,
+    FOREIGN KEY (dish_type) REFERENCES dish_type(dish_id),
+    FOREIGN KEY (event_id) REFERENCES events(event_id)
+    );

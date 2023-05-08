@@ -6,11 +6,21 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import requests
 from py_edamam import Edamam
 import sqlite3
+from functools import wraps
 
 app = Flask(__name__)
 
 #configure SQL database
 db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
+
+#Log-in Required
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if sesson.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
 
 #make sure API key is set in server start
 
@@ -22,10 +32,10 @@ Session(app)
 
 #app route index (profile page)
 @app.route("/")
+@login_required
 def index():
 #show profile of user
-    if not session.get("username"):
-        return redirect("/login")
+    username = session.get("username")
        
     return render_template("index.html")    
 #check if user has any events coming up - if not say "no events coming up - plan something here!"
@@ -116,11 +126,11 @@ def register():
         return render_template("register.html")
 
 #app route create event
-@app.route("/event", methods=["GET", "POST"])
-def event():
+@app.route("/events", methods=["GET", "POST"])
+@login_required
+def events():
 # USER CREATES EVENT BY ENTERING INFORMATION INTO EVENT TABLE
-    #create dishes dictionary 
-    dishes = {"entree": None, "side-dish": None, "dessert": None, "beverage": None, "dishware": None }
+    host_id = session.get("user_id")
 
     if request.method == "POST":
         event_title = request.form.get("eventtitle")
@@ -135,12 +145,8 @@ def event():
         with sqlite3.connect(db) as con:
             cur = con.cursor() 
             data = cur.execute("INSERT INTO events (event_name, event_date_time, event_location, event_theme, host_id) VALUES (?,?,?,?,?)", (event_title, datetime, event_location, event_theme, host_id))
-            print(data)
             con.commit()
-            print(data)
         #user chooses how many dishes needed for event
-        for key, value in dishes.items():
-            dishes[key] = int(request.form.get(key))
         #show new event in new_event html
 
         return render_template("event.html", dishes=dishes)
