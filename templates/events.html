@@ -44,7 +44,82 @@ block main %}
     />
   </div>
   <h4>How many of each dish do you need?</h4>
-
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" name="entree" id="entree">Entree</span>
+    </div>
+    <input
+      type="number"
+      min="1"
+      max="10"
+      name="amount_of_entree"
+      class="form-control"
+      aria-label="Default"
+      aria-describedby="inputGroup-sizing-default"
+    />
+  </div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" name="side_dish" id="side_dish"
+        >Side Dish</span
+      >
+    </div>
+    <input
+      type="number"
+      min="1"
+      max="10"
+      name="amount_of_sidedish"
+      class="form-control"
+      aria-label="Default"
+      aria-describedby="inputGroup-sizing-default"
+    />
+  </div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" name="dessert" id="dessert">Dessert</span>
+    </div>
+    <input
+      type="number"
+      min="1"
+      max="10"
+      name="amount_of_dessert"
+      class="form-control"
+      aria-label="Default"
+      aria-describedby="inputGroup-sizing-default"
+    />
+  </div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" name="beverages" id="beverages"
+        >Beverages</span
+      >
+    </div>
+    <input
+      type="number"
+      min="1"
+      max="10"
+      name="amount_of_beverage"
+      class="form-control"
+      aria-label="Default"
+      aria-describedby="inputGroup-sizing-default"
+    />
+  </div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" name="dish_ware" id="dish_ware"
+        >Dishware</span
+      >
+    </div>
+    <input
+      type="number"
+      min="1"
+      max="10"
+      name="amount_of_dishware"
+      class="form-control"
+      aria-label="Default"
+      aria-describedby="inputGroup-sizing-default"
+    />
+  </div>
   <input type="submit" value="Create Event" />
 </form>
 {% endblock %}

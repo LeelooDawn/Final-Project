@@ -17,7 +17,7 @@ db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if sesson.get("user_id") is None:
+        if session.get("id") is None:
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
@@ -131,9 +131,9 @@ def register():
 def events():
 # USER CREATES EVENT BY ENTERING INFORMATION INTO EVENT TABLE
     #create host id for the user
-    host_id = session.get("user_id")
+    host_id = session.get("id")
     #create connection to database
-    con = sqlite.connect(db)
+    con = sqlite3.connect(db)
     cur = con.cursor()
 
     if request.method == "POST":
@@ -142,11 +142,14 @@ def events():
         event_theme = request.form.get("eventtheme")
         datetime = request.form.get("datetime")
         event_location = request.form.get("eventlocation")
-        dish_type = request.form.get("dish_type")
-        amount_of_type = request.form.get("amount_of_type")
+        amount_of_entree = request.form.get("amount_of_entree")
+        amount_of_sidedish = request.form.get("amount_of_sidedish")
+        amount_of_dessert = request.form.get("amount_of_dessert")
+        amount_of_beverage = request.form.get("amount_of_beverage")
+        amount_of_dishware = request.form.get("amount_of_dishware")
         #make sure no fields are left black
         error = "All fields are required"
-        if not all(event_title, event_theme, datetime, event_location, dish_type,):
+        if not all(event_title, event_theme, datetime, event_location, dish_type, amount_of_entree, amount_of_sidedish, amount_of_dessert, amount_of_beverage, amount_of_dishware):
             return render_template ("error.html", error=error)
         #begin adding event to database
         cur.execute("BEGIN")
@@ -155,7 +158,7 @@ def events():
         #get created event primary id
         event_id = cur.lastrowid
         #get dish-type and select the dish-id from the table 
-        cur.execute("SELECT dish_id FROM dish_type WHERE dish_type = ?" (dish_type,))
+        cur.execute("SELECT dish_id FROM dish_type WHERE dish_type = (?, ?, ?, ?, ?)", ())
         dish_id = c.fetchone()[0]
         #enter dishes information: dish-id (from other table), amount of the type of dish, and the event-id just created
         new_event_dishes = cur.execute("INSERT INTO dishes_needed (dish_id, amount_of_type, event_id) VALUES(?,?,?)", (dish_id, amount_of_type, event_id))
@@ -172,18 +175,16 @@ def events():
             dishType=dish_type
             amount_of_dishes=new_event_dishes["amount_of_type"]
 
-        return render_template("newevent.html", name=name, location=location, datetime=dateandtime, theme=theme, dishType=dish_type, amount_of_dishes=amount_of_dishes)
+        return render_template("events/newevent.html", name=name, location=location, datetime=dateandtime, theme=theme, dishType=dish_type, amount_of_dishes=amount_of_dishes)
     else:
-        cur.execute("SELECT dish_type FROM dish_type")
-        dish_types = [row[0] for row in c.fetchall()]
-        return render_template("events.html", dish_types=dish_types)
+        return render_template("events.html")
 
 #APP ROUTE - CONFIRM EVENT INFORMATION & SEND INVITATIONS
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
     #contact API 
-    user_id = session.get("user_id")
+    user_id = session.get("id")
 
     recipe = Edamam(
         recipes_appid=os.environ.get('APP_ID'),
