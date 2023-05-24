@@ -43,82 +43,66 @@ block main %}
       placeholder="The Office LunchRoom"
     />
   </div>
-  <h4>How many of each dish do you need?</h4>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" name="entree" id="entree">Entree</span>
-    </div>
+  <h4>What types of dishes do you need?</h4>
+  <div class="form-check">
     <input
-      type="number"
-      min="1"
-      max="10"
-      name="amount_of_entree"
-      class="form-control"
-      aria-label="Default"
-      aria-describedby="inputGroup-sizing-default"
+      class="form-check-input"
+      type="checkbox"
+      value="entree"
+      id="entree"
+      name="selection"
     />
+    <label class="form-check-label" for="flexCheckDefault">
+      Entrees (ex: a main-dish like Lasagna)
+    </label>
   </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" name="side_dish" id="side_dish"
-        >Side Dish</span
-      >
-    </div>
+  <div class="form-check">
     <input
-      type="number"
-      min="1"
-      max="10"
-      name="amount_of_sidedish"
-      class="form-control"
-      aria-label="Default"
-      aria-describedby="inputGroup-sizing-default"
+      class="form-check-input"
+      type="checkbox"
+      value="sidedish"
+      id="sidedish"
+      name="selection"
     />
+    <label class="form-check-label" for="flexCheckDefault">
+      Side-Dishes (ex: potato salad, chips & dip)
+    </label>
   </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" name="dessert" id="dessert">Dessert</span>
-    </div>
+  <div class="form-check">
     <input
-      type="number"
-      min="1"
-      max="10"
-      name="amount_of_dessert"
-      class="form-control"
-      aria-label="Default"
-      aria-describedby="inputGroup-sizing-default"
+      class="form-check-input"
+      type="checkbox"
+      value="dessert"
+      id="dessert"
+      name="selection"
     />
+    <label class="form-check-label" for="flexCheckDefault">
+      Desserts (ex: cheesecake, cookies)
+    </label>
   </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" name="beverages" id="beverages"
-        >Beverages</span
-      >
-    </div>
+  <div class="form-check">
     <input
-      type="number"
-      min="1"
-      max="10"
-      name="amount_of_beverage"
-      class="form-control"
-      aria-label="Default"
-      aria-describedby="inputGroup-sizing-default"
+      class="form-check-input"
+      type="checkbox"
+      value="beverage"
+      id="beverage"
+      name="selection"
     />
+    <label class="form-check-label" for="flexCheckDefault">
+      Beverages (ex: sparkling water, cokes)
+    </label>
   </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" name="dish_ware" id="dish_ware"
-        >Dishware</span
-      >
-    </div>
+  <div class="form-check">
     <input
-      type="number"
-      min="1"
-      max="10"
-      name="amount_of_dishware"
-      class="form-control"
-      aria-label="Default"
-      aria-describedby="inputGroup-sizing-default"
+      class="form-check-input"
+      type="checkbox"
+      value="dishware"
+      id="dishware"
+      name="selection"
     />
+    <label class="form-check-label" for="flexCheckDefault">
+      I need dishware! (ex: forks, knives, paper plates)
+    </label>
   </div>
   <input type="submit" value="Create Event" />
 </form>

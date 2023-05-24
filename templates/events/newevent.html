@@ -1,5 +1,33 @@
-{% extends "layout.html" %} {% block title %} Event Planning {% endblock %} {%
-block main %}
+{% extends "layout.html" %} {% block title %} Potluck Party: new event {%
+endblock %} {% block main %}
 <h1>Here is what you want for your Potluck</h1>
-{{ name }} {{ theme }} {{ location }} {{ dateandtime }} {{ dishType }} {{
-amount_of_dishes }} {% endblock %}
+<p>
+  Please check it over, add how many dishes you need of each type, and hit
+  submit when you're ready!
+</p>
+<form action="/events" method="post">
+  <div>
+    <label> {{ name }} </label>
+    <label>{{ theme }}</label>
+    <label>{{ location }}</label>
+    <label>{{ dateandtime }}</label>
+  </div>
+  {% if 'entree' in selected_dishes %}
+  <label for="numberofdishes">How Many Entrees?:</label>
+  <input type="number" min="1" max="10" name="entrees" /><br />
+  {% endif %} {% if 'sidedish' in selected_dishes %}
+  <label for="numberofdishes">How Many Side-Dishes?:</label>
+  <input type="number" min="1" max="10" name="side_dish" /><br />
+  {% endif %} {% if 'dessert' in selected_dishes %}
+  <label for="numberofdishes">How Many Desserts?:</label>
+  <input type="number" min="1" max="10" name="desserts" /><br />
+  {% endif %} {% if 'beverage' in selected_dishes %}
+  <label for="numberofdishes">How Many Beverages?:</label>
+  <input type="number" min="1" max="10" name="beverages" /><br />
+  {% endif %} {% if 'dishware' in selected_dishes %}
+  <label for="numberofdishes">How Much Dish-Ware?:</label>
+  <input type="number" min="1" max="10" name="dish_ware" /><br />
+  {% endif %}
+  <input type="submit" value="Submit Event" />
+</form>
+{% endblock %}

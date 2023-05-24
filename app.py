@@ -31,7 +31,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 #app route index (profile page)
-@app.route("/")
+@app.route("/{{ session["id"] }}")
 @login_required
 def index():
 #show profile of user
@@ -130,27 +130,41 @@ def register():
 @login_required
 def events():
 # USER CREATES EVENT BY ENTERING INFORMATION INTO EVENT TABLE
-    #create host id for the user
-    host_id = session.get("id")
-    #create connection to database
-    con = sqlite3.connect(db)
-    cur = con.cursor()
-
     if request.method == "POST":
         #get all information from form
         event_title = request.form.get("eventtitle")
         event_theme = request.form.get("eventtheme")
         datetime = request.form.get("datetime")
         event_location = request.form.get("eventlocation")
-        amount_of_entree = request.form.get("amount_of_entree")
-        amount_of_sidedish = request.form.get("amount_of_sidedish")
-        amount_of_dessert = request.form.get("amount_of_dessert")
-        amount_of_beverage = request.form.get("amount_of_beverage")
-        amount_of_dishware = request.form.get("amount_of_dishware")
-        #make sure no fields are left black
+        selected_dishes = request.form.getlist("selection")
+        #make sure no fields are left blank
         error = "All fields are required"
-        if not all(event_title, event_theme, datetime, event_location, dish_type, amount_of_entree, amount_of_sidedish, amount_of_dessert, amount_of_beverage, amount_of_dishware):
+        if not all(event_title, event_theme, datetime, event_location, selected_dishes):
             return render_template ("error.html", error=error)
+        
+        return render_template("events/newevent.html", name=event_title, theme=event_theme, dateandtime=datetime, location=event_location, selected_dishes=selected_dishes)
+    else:
+        return render_template("events.html")    
+        
+    
+
+#APP ROUTE - CONFIRM EVENT INFORMATION
+@app.route("/events/newevent", methods=["GET", "POST"])
+@login_required
+def confirm()
+    host_id = session.get("id")
+    #create connection to database
+    con = sqlite3.connect(db)
+    cur = con.cursor()
+
+    if request.method == "POST":
+        event_title = request.form.get("name")
+        datetime = request.form.get("datetime")
+        event_theme=request.form.get("theme")
+        event_location=request.form.get("location")
+        #bring in dish type and convert to integer
+        #save the dish amount added
+
         #begin adding event to database
         cur.execute("BEGIN")
         #add event time, location, title
@@ -168,18 +182,14 @@ def events():
         
         #show new event in new_event html
         if new_event and new_event_dishes:
+            id_of_event=event_id
             name=new_event["event_name"]
             location=new_event["event_location"]
             dateandtime=new_event["event_date_time"]
             theme=new_event["event_theme"]
-            dishType=dish_type
-            amount_of_dishes=new_event_dishes["amount_of_type"]
+            #dishes & amounts
 
-        return render_template("events/newevent.html", name=name, location=location, datetime=dateandtime, theme=theme, dishType=dish_type, amount_of_dishes=amount_of_dishes)
-    else:
-        return render_template("events.html")
-
-#APP ROUTE - CONFIRM EVENT INFORMATION & SEND INVITATIONS
+        return render_template("events/newevent.html", name=name, location=location, datetime=dateandtime, theme=theme, event_id=id_of_event)
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
