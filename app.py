@@ -142,46 +142,64 @@ def events():
         if not all(event_title, event_theme, datetime, event_location, selected_dishes):
             return render_template ("error.html", error=error)
         
-        return render_template("events/newevent.html", name=event_title, theme=event_theme, dateandtime=datetime, location=event_location, selected_dishes=selected_dishes)
+
+        return redirect(url_for("/events/newevent", name=event_title, theme=event_theme, datetime=datetime, location=event_location, selected_dishes=selected_dishes))
     else:
         return render_template("events.html")    
-        
-    
 
 #APP ROUTE - CONFIRM EVENT INFORMATION
 @app.route("/events/newevent", methods=["GET", "POST"])
 @login_required
-def confirm()
+def newevent()
+    #get host id
     host_id = session.get("id")
     #create connection to database
     con = sqlite3.connect(db)
     cur = con.cursor()
+    #establish variables for dish_type
+    entree_type = 1
+    side_dish_type = 2
+    dessert_type = 3
+    beverage_type = 4
+    dish_ware_type = 5
 
     if request.method == "POST":
-        event_title = request.form.get("name")
-        datetime = request.form.get("datetime")
-        event_theme=request.form.get("theme")
-        event_location=request.form.get("location")
-        #bring in dish type and convert to integer
-        #save the dish amount added
-
+        event_title = request.args.get("name")
+        datetime = request.args.get("datetime")
+        event_theme=request.args.get("theme")
+        event_location=request.args.get("location")
+        selected_dishes = request.args.getlist("selected_dishes")
+        entree_amount = request.form.get("entrees")
+        side_dish_amount = request.form.get("side_dish")
+        dessert_amount = request.form.get("desserts")
+        beverage_amount = request.form.get("beverages")
+        dish_ware_amount = request.form.get("dish_ware")
+        #create a dishes_needed tuple to pair the dish type with the amount
+        dishes_needed = []
+        if entree_amount:
+            dishes_needed.append((entree_type, entree_amount))
+        if side_dish_amount:
+            dishes_needed.append((side_dish_type, side_dish_amount))
+        if dessert_amount:
+            dishes_needed.append((dessert_type, dessert_amount))
+        if beverage_amount:
+            dishes_needed.append((beverage_type, beverage_amount))
+        if dish_ware_amount:
+            dishes_needed.append((dish_ware_type, dish_ware_amount))
         #begin adding event to database
         cur.execute("BEGIN")
         #add event time, location, title
         new_event = cur.execute("INSERT INTO events (event_name, event_date_time, event_location, event_theme, host_id) VALUES (?,?,?,?,?)", (event_title, datetime, event_location, event_theme, host_id))
         #get created event primary id
         event_id = cur.lastrowid
-        #get dish-type and select the dish-id from the table 
-        cur.execute("SELECT dish_id FROM dish_type WHERE dish_type = (?, ?, ?, ?, ?)", ())
-        dish_id = c.fetchone()[0]
-        #enter dishes information: dish-id (from other table), amount of the type of dish, and the event-id just created
-        new_event_dishes = cur.execute("INSERT INTO dishes_needed (dish_id, amount_of_type, event_id) VALUES(?,?,?)", (dish_id, amount_of_type, event_id))
+        #enter dishes information
+        event_dishes_needed = cur.execute("INSERT INTO dishes_needed (dish_type, amount_of_type, event_id) VALUES(?,?,?)", (dishes_needed, event_id))
         #commit all transactions
         cur.execute("COMMIT")
         con.close()
         
-        #show new event in new_event html
-        if new_event and new_event_dishes:
+        #show new event in confirm_event html
+        if new_event and event_dishes_needed:
             id_of_event=event_id
             name=new_event["event_name"]
             location=new_event["event_location"]
@@ -189,7 +207,9 @@ def confirm()
             theme=new_event["event_theme"]
             #dishes & amounts
 
-        return render_template("events/newevent.html", name=name, location=location, datetime=dateandtime, theme=theme, event_id=id_of_event)
+        return redirect("events/confirmevent/{id_of_event}.html", name=name, location=location, datetime=dateandtime, theme=theme, event_id=id_of_event)
+    else:
+        return render_template("events/newevent.html", )
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
