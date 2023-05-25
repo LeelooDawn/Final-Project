@@ -31,7 +31,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 #app route index (profile page)
-@app.route("/{{ session["id"] }}")
+@app.route("/")
 @login_required
 def index():
 #show profile of user
@@ -137,20 +137,20 @@ def events():
         datetime = request.form.get("datetime")
         event_location = request.form.get("eventlocation")
         selected_dishes = request.form.getlist("selection")
+        print(event_title, event_theme, datetime, event_location, selected_dishes)
         #make sure no fields are left blank
         error = "All fields are required"
-        if not all(event_title, event_theme, datetime, event_location, selected_dishes):
+        if not event_title and event_theme and datetime and event_location and selected_dishes:
             return render_template ("error.html", error=error)
         
-
-        return redirect(url_for("/events/newevent", name=event_title, theme=event_theme, datetime=datetime, location=event_location, selected_dishes=selected_dishes))
+        return render_template("/events/newevent.html", name=event_title, theme=event_theme, datetime=datetime, location=event_location, selected_dishes=selected_dishes)
     else:
         return render_template("events.html")    
 
 #APP ROUTE - CONFIRM EVENT INFORMATION
 @app.route("/events/newevent", methods=["GET", "POST"])
 @login_required
-def newevent()
+def newevent():
     #get host id
     host_id = session.get("id")
     #create connection to database
@@ -164,11 +164,10 @@ def newevent()
     dish_ware_type = 5
 
     if request.method == "POST":
-        event_title = request.args.get("name")
-        datetime = request.args.get("datetime")
-        event_theme=request.args.get("theme")
-        event_location=request.args.get("location")
-        selected_dishes = request.args.getlist("selected_dishes")
+        event_title = request.form.get("name")
+        datetime = request.form.get("datetime")
+        event_theme=request.form.get("theme")
+        event_location=request.form.get("location")
         entree_amount = request.form.get("entrees")
         side_dish_amount = request.form.get("side_dish")
         dessert_amount = request.form.get("desserts")
@@ -193,7 +192,7 @@ def newevent()
         #get created event primary id
         event_id = cur.lastrowid
         #enter dishes information
-        event_dishes_needed = cur.execute("INSERT INTO dishes_needed (dish_type, amount_of_type, event_id) VALUES(?,?,?)", (dishes_needed, event_id))
+        event_dishes_needed = cur.executemany("INSERT INTO dishes_needed (dish_type, amount_of_type, event_id) VALUES(?,?,?)", [(*dish, event_id) for dish in dishes_needed])
         #commit all transactions
         cur.execute("COMMIT")
         con.close()
@@ -205,11 +204,11 @@ def newevent()
             location=new_event["event_location"]
             dateandtime=new_event["event_date_time"]
             theme=new_event["event_theme"]
-            #dishes & amounts
+            dishes=dishes_needed 
 
-        return redirect("events/confirmevent/{id_of_event}.html", name=name, location=location, datetime=dateandtime, theme=theme, event_id=id_of_event)
+        return render_template("events/confirm/{id_of_event}.html", name=name, location=location, datetime=dateandtime, theme=theme, event_id=id_of_event, dishes=dishes)
     else:
-        return render_template("events/newevent.html", )
+        return render_template("events/newevent.html")
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
