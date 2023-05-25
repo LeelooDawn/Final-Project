@@ -137,7 +137,6 @@ def events():
         datetime = request.form.get("datetime")
         event_location = request.form.get("eventlocation")
         selected_dishes = request.form.getlist("selection")
-        print(event_title, event_theme, datetime, event_location, selected_dishes)
         #make sure no fields are left blank
         error = "All fields are required"
         if not event_title and event_theme and datetime and event_location and selected_dishes:
@@ -195,18 +194,14 @@ def newevent():
         event_dishes_needed = cur.executemany("INSERT INTO dishes_needed (dish_type, amount_of_type, event_id) VALUES(?,?,?)", [(*dish, event_id) for dish in dishes_needed])
         #commit all transactions
         cur.execute("COMMIT")
+        cur.execute("SELECT * FROM events WHERE event_id = ?" (event_id,))
+        event_data = cur.fetchall()
         con.close()
-        
-        #show new event in confirm_event html
-        if new_event and event_dishes_needed:
-            id_of_event=event_id
-            name=new_event["event_name"]
-            location=new_event["event_location"]
-            dateandtime=new_event["event_date_time"]
-            theme=new_event["event_theme"]
-            dishes=dishes_needed 
 
-        return render_template("events/confirm/{id_of_event}.html", name=name, location=location, datetime=dateandtime, theme=theme, event_id=id_of_event, dishes=dishes)
+        #access the dishes amount in each of the tuples of the dishes needed tuple
+        #then I want to put in my template the types of dishes and have the dishes amount appear next to each type
+
+        return render_template("events/confirm/{event_id}.html", event_data=event_data,) #dishes amount here)
     else:
         return render_template("events/newevent.html")
 
