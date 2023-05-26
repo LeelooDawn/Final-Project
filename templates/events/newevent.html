@@ -7,22 +7,22 @@ endblock %} {% block main %}
 </p>
 <form action="/events/newevent" method="post">
   <div>
-    <label for="dishes"> {{ name }} </label>
-    <input type="text" id="dishes" name="name" value="{{ name }}" required />
-    <label for="dishes">{{ theme }}</label>
-    <input type="text" id="dishes" name="theme" value="{{ theme }}" required />
-    <label for="dishes">{{ location }}</label>
+    <label for="event">Title:</label>
+    <input type="text" id="event" name="name" value="{{ name }}" required />
+    <label for="event">Theme:</label>
+    <input type="text" id="event" name="theme" value="{{ theme }}" required />
+    <label for="event">Location:</label>
     <input
       type="text"
-      id="dishes"
+      id="event"
       name="location"
       value="{{ location }}"
       required
     />
-    <label for="dishes">{{ datetime }}</label>
+    <label for="event">Date & Time:</label>
     <input
       type="text"
-      id="dishes"
+      id="event"
       name="datetime"
       value="{{ datetime }}"
       required

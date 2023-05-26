@@ -1,2 +1,26 @@
 {% extends "layout.html" %} {% block title %} Potluck Party: Confirm Event{%
-endblock %} {% block main %} {% endblock %}
+endblock %} {% block main %}
+<h1>Send Invitations</h1>
+<div>
+  <h5>{{ event_data[1] }}</h5>
+  <h4>{{ event_data[2] }}</h4>
+  <h4>{{ event_data[3] }}</h4>
+  <h4>{{ event_data[4] }}</h4>
+  <p>Need {{ amount_of_entree }} Entrees</p>
+  <p>Need {{ amount_of_sidedish }} Side Dishes</p>
+  <p>Need {{ amount_of_dessert }} Desserts</p>
+  <p>Need {{ amount_of_beverage }} Beverages</p>
+  <p>Need {{ amount_of_dishware }} Dishware</p>
+</div>
+<h2>Please enter the emails and names of the people you'd like to invite.</h2>
+<h3>
+  Once you have entered them all, hit submit and the invitations will be sent!
+</h3>
+<div>
+  <form action="/confirm" method="post">
+    <input type="text" name="emails" />
+    <input type="submit" value="Send Invitations" />
+  </form>
+</div>
+
+{% endblock %}

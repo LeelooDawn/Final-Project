@@ -194,14 +194,19 @@ def newevent():
         event_dishes_needed = cur.executemany("INSERT INTO dishes_needed (dish_type, amount_of_type, event_id) VALUES(?,?,?)", [(*dish, event_id) for dish in dishes_needed])
         #commit all transactions
         cur.execute("COMMIT")
-        cur.execute("SELECT * FROM events WHERE event_id = ?" (event_id,))
+        cur.execute("SELECT * FROM events WHERE event_id = ?", (event_id,))
         event_data = cur.fetchall()
         con.close()
 
-        #access the dishes amount in each of the tuples of the dishes needed tuple
-        #then I want to put in my template the types of dishes and have the dishes amount appear next to each type
-
-        return render_template("events/confirm/{event_id}.html", event_data=event_data,) #dishes amount here)
+        #create a dictionary from the selected dishes to get the amounts
+        amounts = {}
+        for dish, amount in dishes_needed:
+            if entree_type(dish):
+                amounts[dish] = amount
+        
+       
+        #render template with event data and dishes amount
+        return render_template("events/confirm/{event_id}.html", event_data=event_data, amount_of_entree=amount_of_entree, amount_of_sidedish=amount_of_sidedish, amount_of_dessert=amount_of_dessert, amount_of_beverage=amount_of_beverage, amount_of_dishware=amount_of_dishware)
     else:
         return render_template("events/newevent.html")
 
