@@ -7,6 +7,7 @@ import requests
 from py_edamam import Edamam
 import sqlite3
 from functools import wraps
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -141,7 +142,10 @@ def events():
         error = "All fields are required"
         if not event_title and event_theme and datetime and event_location and selected_dishes:
             return render_template ("error.html", error=error)
-        
+
+        convert_datetime = datetime.strptime(datetime, "%Y-%m-%dT%H:%M")
+        formatted_datetime= convert_datetime.strftime("%B %-d %Y, %-I:%M %p")
+
         return render_template("/events/newevent.html", name=event_title, theme=event_theme, datetime=datetime, location=event_location, selected_dishes=selected_dishes)
     else:
         return render_template("events.html")    
@@ -198,15 +202,17 @@ def newevent():
         event_data = cur.fetchall()
         con.close()
 
-        #create a dictionary from the selected dishes to get the amounts
-        amounts = {}
-        for dish, amount in dishes_needed:
-            if entree_type(dish):
-                amounts[dish] = amount
-        
-       
+        #convert number to text within my list of tuples (ex: (1 ,4) into (entree, 4))
+        number_to_text = {
+            1 : "Entree",
+            2 : "Side Dish",
+            3 : "Dessert",
+            4 : "Beverage",
+            5 : "Dishware"
+        }
+        convert_dishes_needed = [(number_to_text[num], second_num) for num, second_num in dishes_needed]
         #render template with event data and dishes amount
-        return render_template("events/confirm/{event_id}.html", event_data=event_data, amount_of_entree=amount_of_entree, amount_of_sidedish=amount_of_sidedish, amount_of_dessert=amount_of_dessert, amount_of_beverage=amount_of_beverage, amount_of_dishware=amount_of_dishware)
+        return render_template("events/confirm.html", event_data=event_data, dishes_needed=convert_dishes_needed)
     else:
         return render_template("events/newevent.html")
 

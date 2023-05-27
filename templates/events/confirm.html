@@ -2,15 +2,14 @@
 endblock %} {% block main %}
 <h1>Send Invitations</h1>
 <div>
-  <h5>{{ event_data[1] }}</h5>
-  <h4>{{ event_data[2] }}</h4>
-  <h4>{{ event_data[3] }}</h4>
-  <h4>{{ event_data[4] }}</h4>
-  <p>Need {{ amount_of_entree }} Entrees</p>
-  <p>Need {{ amount_of_sidedish }} Side Dishes</p>
-  <p>Need {{ amount_of_dessert }} Desserts</p>
-  <p>Need {{ amount_of_beverage }} Beverages</p>
-  <p>Need {{ amount_of_dishware }} Dishware</p>
+  {% for data in event_data %}
+  <h5>{{ data[1] }}</h5>
+  <h4>{{ data[2] }}</h4>
+  <h4>{{ data[3] }}</h4>
+  <h4>{{ data[4] }}</h4>
+  {% endfor %} {% for x,y in dishes_needed %}
+  <li>You need {{ y }} of {{ x }}</li>
+  {% endfor %}
 </div>
 <h2>Please enter the emails and names of the people you'd like to invite.</h2>
 <h3>
