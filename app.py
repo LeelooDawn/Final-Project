@@ -37,10 +37,11 @@ Session(app)
 def index():
 #show profile of user
     username = session.get("username")
-       
+       #JOIN rsvp ids of rsvp table/dishes table that are associated with event id that user is a host of
+       #- yes/no, name, dish text, dish type
+
     return render_template("index.html")    
-#check if user has any events coming up - if not say "no events coming up - plan something here!"
-#api of recipes will show up at bottom
+
 
 
  #app route login user 
@@ -215,6 +216,28 @@ def newevent():
         return render_template("events/confirm.html", event_data=event_data, dishes_needed=convert_dishes_needed)
     else:
         return render_template("events/newevent.html")
+
+@app.route("/events/confirm", methods=["GET", "POST"])
+def confirm()
+
+#enter emails and names into a form to send out
+#Send Grid email format
+#send emails with all information
+
+#in email the person should be able to hit yes or no
+
+#app_route("/events/event-id/RSVP")
+#def RSVP
+#if method is post - #get answer from RSVP email ("YES" or "NO")
+    #if RSVP is no
+    #enter answer & name into RSVP database
+    #show "Sorry you can't make it, create your own event here"
+    #if RSVP is yes
+    #enter answer & Name into RSVP database
+    #ask attendee to put in name, text of dish they're bringing, what type of dish
+        #the type will be written out like 1-entree, 2-sidedish, etc
+    #enter information into dishes database
+
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
