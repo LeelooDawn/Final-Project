@@ -88,3 +88,16 @@ FOREIGN KEY (dish_id)
 FOREIGN KEY (rsvp_id)
     REFERENCES rsvp(rsvp_id)
 );
+
+SELECT event_name
+    , event_date_time
+    , event_theme
+    , event_location
+    , rsvp.name
+    , rsvp.response
+    , dishes.dish
+    FROM events
+    JOIN rsvp
+    ON rsvp.event_id = event.event_id
+    JOIN dishes
+    ON dishes.rsvp_id = rsvp.rsvp_id

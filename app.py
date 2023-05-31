@@ -144,9 +144,6 @@ def events():
         if not event_title and event_theme and datetime and event_location and selected_dishes:
             return render_template ("error.html", error=error)
 
-        convert_datetime = datetime.strptime(datetime, "%Y-%m-%dT%H:%M")
-        formatted_datetime= convert_datetime.strftime("%B %-d %Y, %-I:%M %p")
-
         return render_template("/events/newevent.html", name=event_title, theme=event_theme, datetime=datetime, location=event_location, selected_dishes=selected_dishes)
     else:
         return render_template("events.html")    
@@ -169,7 +166,7 @@ def newevent():
 
     if request.method == "POST":
         event_title = request.form.get("name")
-        datetime = request.form.get("datetime")
+        date_time = request.form.get("datetime")
         event_theme=request.form.get("theme")
         event_location=request.form.get("location")
         entree_amount = request.form.get("entrees")
@@ -192,7 +189,7 @@ def newevent():
         #begin adding event to database
         cur.execute("BEGIN")
         #add event time, location, title
-        new_event = cur.execute("INSERT INTO events (event_name, event_date_time, event_location, event_theme, host_id) VALUES (?,?,?,?,?)", (event_title, datetime, event_location, event_theme, host_id))
+        new_event = cur.execute("INSERT INTO events (event_name, event_date_time, event_location, event_theme, host_id) VALUES (?,?,?,?,?)", (event_title, date_time, event_location, event_theme, host_id))
         #get created event primary id
         event_id = cur.lastrowid
         #enter dishes information
@@ -202,7 +199,9 @@ def newevent():
         cur.execute("SELECT * FROM events WHERE event_id = ?", (event_id,))
         event_data = cur.fetchall()
         con.close()
-
+        #convert time into user friendly text
+        date_new = datetime.strptime(date_time, "%Y-%m-%dT%H:%M")
+        formatted_datetime= date_new.strftime("%B %-d %Y, %-I:%M %p")
         #convert number to text within my list of tuples (ex: (1 ,4) into (entree, 4))
         number_to_text = {
             1 : "Entree",
@@ -213,12 +212,12 @@ def newevent():
         }
         convert_dishes_needed = [(number_to_text[num], second_num) for num, second_num in dishes_needed]
         #render template with event data and dishes amount
-        return render_template("events/confirm.html", event_data=event_data, dishes_needed=convert_dishes_needed)
+        return render_template("events/confirm.html", event_data=event_data, dishes_needed=convert_dishes_needed, formatted_datetime=formatted_datetime)
     else:
         return render_template("events/newevent.html")
 
 @app.route("/events/confirm", methods=["GET", "POST"])
-def confirm()
+def confirm():
 
 #enter emails and names into a form to send out
 #Send Grid email format
@@ -237,7 +236,7 @@ def confirm()
     #ask attendee to put in name, text of dish they're bringing, what type of dish
         #the type will be written out like 1-entree, 2-sidedish, etc
     #enter information into dishes database
-
+    return render_template("events/confirm.html")
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
