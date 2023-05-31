@@ -37,8 +37,15 @@ Session(app)
 def index():
 #show profile of user
     username = session.get("username")
-       #JOIN rsvp ids of rsvp table/dishes table that are associated with event id that user is a host of
-       #- yes/no, name, dish text, dish type
+    user_id = session.get("id")
+
+    con = sqlite3.connect(db)
+    cur = con.cursor()
+    cur.execute("BEGIN")
+    event.event_id = cur.execute("SELECT event_id FROM events WHERE host_id = user_id", user_id)
+    cur.execute("SELECT event_name, event_date_time, event_theme, event_location, rsvp.name, rsvp.response, dishes.dish FROM events JOIN rsvp ON rsvp.event_id = event.event_id JOIN dishes ON dishes.rsvp_id = rsvp.rsvp_id", event.event_id)
+    event_data = cur.fetchall()
+    con.close()
 
     return render_template("index.html")    
 
