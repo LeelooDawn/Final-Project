@@ -63,3 +63,28 @@ CREATE TABLE dishes_needed (
     FOREIGN KEY (dish_type) REFERENCES dish_type(dish_id),
     FOREIGN KEY (event_id) REFERENCES events(event_id)
     );
+
+
+DROP TABLE dishes;
+
+DROP TABLE rsvp;
+
+CREATE TABLE rsvp (
+rsvp_id INTEGER PRIMARY KEY AUTOINCREMENT,
+event_id INTEGER NOT NULL,
+name TEXT NOT NULL,
+response BOOLEAN NOT NULL,
+FOREIGN KEY (event_id) REFERENCES events(event_id)
+);
+
+CREATE TABLE dishes (
+dishes_id INTEGER PRIMARY KEY,
+dish TEXT NOT NULL,
+name TEXT NOT NULL,
+dish_id INTEGER NOT NULL,
+rsvp_id INTEGER NOT NULL,
+FOREIGN KEY (dish_id)
+    REFERENCES  dish_type(dish_id),
+FOREIGN KEY (rsvp_id)
+    REFERENCES rsvp(rsvp_id)
+);

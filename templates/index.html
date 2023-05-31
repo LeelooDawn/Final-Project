@@ -4,12 +4,49 @@ main %}
   <h1><strong>Welcome {{ session.username }}!</strong></h1>
 </div>
 <div class="container">
-  <p>You have not RSVP'd to any events yet</p>
   <button type="submit" class="btn btn-info">
     <a href="{{ url_for ('events') }}">Create your event here!</a>
   </button>
 </div>
-<div class="container">
-  <p>This is where the Recipe API will go</p>
-</div>
+<h6>Event information</h6>
+<p>
+  Here you can see your event, who has replied, and what dish they are bringing
+</p>
+<table>
+  <thead>
+    <tr>
+      <th>Event Title</th>
+      <th>Event Date</th>
+      <th>Event Theme</th>
+      <th>Event Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>(event info)</td>
+      <td>(event info)</td>
+      <td>(event info)</td>
+      <td>(event info)</td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <thead>
+    <tr>
+      <th>Guest Name</th>
+      <th>RSVP (yes/no)</th>
+      <th>Dish Type</th>
+      <th>What dish are they bringing?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>(guest info)</td>
+      <td>(guest info)</td>
+      <td>(guest info)</td>
+      <td>(guest info)</td>
+    </tr>
+  </tbody>
+</table>
+
 {% endblock %}
