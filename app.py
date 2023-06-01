@@ -8,8 +8,18 @@ from py_edamam import Edamam
 import sqlite3
 from functools import wraps
 from datetime import datetime
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'myemail@gmail.com'
+app.config['MAIL_PASSWORD'] = '*****'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+
+
 
 #configure SQL database
 db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
@@ -246,15 +256,31 @@ def newevent():
 
 @app.route("/events/confirm", methods=["GET", "POST"])
 def confirm():
+    username = session.get("username")
+    host_id = session.get("id")
+    
+    #get event information to put into message
 
 #enter emails and names into a form to send out
-#Send Grid email format
+    if request.method == "POST":
+        names = request.form.getlist("name")
+        emails = request.form.getlist("email")
+        recipients = []
+        for name, email in zip(names, emails):
+            recipients.append((emails))
 #send emails with all information
+        subject = "You're Invited to a Potluck Party!"
+        body = "Will you be able to make EVENT TITLE on EVENT DATE at EVENT LOCATION? EVENT_THEME ! Please reply yes or no..."
 
+        msg = Message(subject, recipients=recipients, body=body)
+        mail.send(msg)
 #in email the person should be able to hit yes or no
-
+    else:
+        return render_template("events/confirm.html")
+        
 #app_route("/events/event-id/RSVP")
 #def RSVP
+#HTML - rsvp - it will have person give their name, dish text, and select dish type from event
 #if method is post - #get answer from RSVP email ("YES" or "NO")
     #if RSVP is no
     #enter answer & name into RSVP database
@@ -264,7 +290,7 @@ def confirm():
     #ask attendee to put in name, text of dish they're bringing, what type of dish
         #the type will be written out like 1-entree, 2-sidedish, etc
     #enter information into dishes database
-    return render_template("events/confirm.html")
+    
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():

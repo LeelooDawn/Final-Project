@@ -16,11 +16,56 @@ endblock %} {% block main %}
 <h3>
   Once you have entered them all, hit submit and the invitations will be sent!
 </h3>
-<div>
-  <form action="/confirm" method="post">
-    <input type="text" name="emails" />
-    <input type="submit" value="Send Invitations" />
-  </form>
-</div>
+<form action="/confirm" method="post">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name1" required />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name2" required />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name3" required />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name4" required />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name5" required />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name6" required />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name7" required />
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <input type="submit" value="Send Invitations" />
+</form>
 
 {% endblock %}
