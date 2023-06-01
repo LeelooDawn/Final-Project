@@ -89,6 +89,14 @@ FOREIGN KEY (rsvp_id)
     REFERENCES rsvp(rsvp_id)
 );
 
+INSERT INTO rsvp 
+(event_id, name, response)
+VALUES (3, "Katie", true)
+
+INSERT INTO dishes
+(dish, name, dish_id, rsvp_id)
+VALUES ("Cokes", "Katie", 4, 3)
+
 SELECT event_name
     , event_date_time
     , event_theme
@@ -98,6 +106,7 @@ SELECT event_name
     , dishes.dish
     FROM events
     JOIN rsvp
-    ON rsvp.event_id = event.event_id
+    ON rsvp.event_id = events.event_id
     JOIN dishes
     ON dishes.rsvp_id = rsvp.rsvp_id
+    WHERE events.event_id = 3;

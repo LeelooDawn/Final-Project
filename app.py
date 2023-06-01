@@ -42,12 +42,25 @@ def index():
     con = sqlite3.connect(db)
     cur = con.cursor()
     cur.execute("BEGIN")
-    event.event_id = cur.execute("SELECT event_id FROM events WHERE host_id = user_id", user_id)
-    cur.execute("SELECT event_name, event_date_time, event_theme, event_location, rsvp.name, rsvp.response, dishes.dish FROM events JOIN rsvp ON rsvp.event_id = event.event_id JOIN dishes ON dishes.rsvp_id = rsvp.rsvp_id", event.event_id)
-    event_data = cur.fetchall()
-    con.close()
+    cur.execute("SELECT event_id FROM events WHERE host_id = ?", (user_id,))
+    event_ids = cur.fetchall()
+   
+    event_data=[]
 
-    return render_template("index.html")    
+    for event_id in event_ids:
+        query = cur.execute("SELECT event_name, event_date_time, event_theme, event_location, rsvp.name, rsvp.response, dishes.dish FROM events JOIN rsvp ON rsvp.event_id = events.event_id JOIN dishes ON dishes.rsvp_id = rsvp.rsvp_id WHERE events.event_id = ?", (event_id[0],))
+        fetched_data = cur.fetchall()
+        event_data.extend(fetched_data)
+            #convert date time
+        for row in fetched_data:
+            event_date_time = datetime.strptime(row[1], "%Y-%m-%dT%H:%M")
+            formatted_datetime= event_date_time.strftime("%B %-d %Y, %-I:%M %p")
+            row = row[:1] + (formatted_datetime,) + row[2:]
+            event_data.append(row)
+
+    
+    con.close()
+    return render_template("index.html", event_data=event_data)    
 
 
 
@@ -181,6 +194,14 @@ def newevent():
         dessert_amount = request.form.get("desserts")
         beverage_amount = request.form.get("beverages")
         dish_ware_amount = request.form.get("dish_ware")
+
+        #check if event exists already
+        cur.execute("SELECT event_id FROM events WHERE event_name = ? AND event_date_time = ? AND event_location = ? AND host_id = ?", (event_title, date_time, event_location, host_id),)
+        existing_event=cur.fetchone()
+        if existing_event:
+            con.close()
+            err = "This event exists already!"
+            return render_template ("error.html", error=err)
         #create a dishes_needed tuple to pair the dish type with the amount
         dishes_needed = []
         if entree_amount:

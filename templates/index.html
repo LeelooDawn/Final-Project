@@ -12,40 +12,42 @@ main %}
 <p>
   Here you can see your event, who has replied, and what dish they are bringing
 </p>
-<table>
-  <thead>
+<table class="table">
+  <thead class="thead-dark">
     <tr>
-      <th>Event Title</th>
-      <th>Event Date</th>
-      <th>Event Theme</th>
-      <th>Event Location</th>
+      <th scope="col">Event Title</th>
+      <th scope="col">Event Date</th>
+      <th scope="col">Event Theme</th>
+      <th scope="col">Event Location</th>
     </tr>
   </thead>
   <tbody>
+    {% for data in event_data %}
     <tr>
-      <td>(event info)</td>
-      <td>(event info)</td>
-      <td>(event info)</td>
-      <td>(event info)</td>
+      <td scope="row">{{ data[0] }}</td>
+      <td>{{ data[1] }}</td>
+      <td>{{ data[2] }}</td>
+      <td>{{ data[3] }}</td>
     </tr>
+    {% endfor %}
   </tbody>
 </table>
-<table>
-  <thead>
+<table class="table">
+  <thead class="thead-light">
     <tr>
-      <th>Guest Name</th>
-      <th>RSVP (yes/no)</th>
-      <th>Dish Type</th>
-      <th>What dish are they bringing?</th>
+      <th scope="col">Guest Name</th>
+      <th scope="col">RSVP (yes/no)</th>
+      <th scope="col">What dish are they bringing?</th>
     </tr>
   </thead>
   <tbody>
+    {% for data in event_data %}
     <tr>
-      <td>(guest info)</td>
-      <td>(guest info)</td>
-      <td>(guest info)</td>
-      <td>(guest info)</td>
+      <td>{{ data[4] }}</td>
+      <td>{{ data[5] }}</td>
+      <td>{{ data[6] }}</td>
     </tr>
+    {% endfor %}
   </tbody>
 </table>
 
