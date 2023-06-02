@@ -1,0 +1,16 @@
+{% extends "layout.html" %} {% block title %} Potluck Party: Confirm Event{%
+endblock %} {% block main %}
+<h1>Hello! You're invited!</h1>
+<p>Can you Make it?</p>
+{% for data in event_data %}
+<p>{{ data[1] }}</p>
+<p>{{ data[3] }}</p>
+<p>{{ data[4] }}</p>
+{% endfor %}
+<form action="rsvp" method="post">
+  <label for="yes">YES</label>
+  <input type="submit" value="Yes" name="yes" />
+  <label for="no">NO</label>
+  <input type="submit" value="No" name="no" />
+</form>
+{% endblock %}

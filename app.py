@@ -9,14 +9,16 @@ import sqlite3
 from functools import wraps
 from datetime import datetime
 from flask_mail import Mail, Message
+from blinker import signal
 
 app = Flask(__name__)
-app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_SERVER']= 'smtp.gmail.com' 
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'myemail@gmail.com'
-app.config['MAIL_PASSWORD'] = '*****'
+app.config['MAIL_USERNAME'] = os.environ.get('EMAIL')
+app.config['MAIL_PASSWORD'] = os.environ.get('PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_TESTING'] = True
 mail = Mail(app)
 
 
@@ -249,18 +251,27 @@ def newevent():
             5 : "Dishware"
         }
         convert_dishes_needed = [(number_to_text[num], second_num) for num, second_num in dishes_needed]
+        #get event_id and store in session variables
+        event_id = event_data[0][0]
+        session['event_data'] = event_data
+        session['event_id'] = event_id
+        session['formatted_datetime'] = formatted_datetime
         #render template with event data and dishes amount
-        return render_template("events/confirm.html", event_data=event_data, dishes_needed=convert_dishes_needed, formatted_datetime=formatted_datetime)
+        return render_template("events/confirm.html", event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, dishes_needed=convert_dishes_needed)
     else:
         return render_template("events/newevent.html")
 
-@app.route("/events/confirm", methods=["GET", "POST"])
-def confirm():
+@app.route("/events/<int:event_id>/confirm", methods=["GET", "POST"])
+def confirm(event_id):
+    event_id = event_id
     username = session.get("username")
     host_id = session.get("id")
-    
-    #get event information to put into message
+    event_data = session.get("event_data")
+    formatted_datetime=session.get("formatted_datetime")
 
+    subject = "You're Invited to a Potluck Party!"
+    msg = Message(subject, body='', html='')
+    msg.html = render_template("email_template.html", event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, username=username)
 #enter emails and names into a form to send out
     if request.method == "POST":
         names = request.form.getlist("name")
@@ -268,19 +279,20 @@ def confirm():
         recipients = []
         for name, email in zip(names, emails):
             recipients.append((emails))
-#send emails with all information
-        subject = "You're Invited to a Potluck Party!"
-        body = "Will you be able to make EVENT TITLE on EVENT DATE at EVENT LOCATION? EVENT_THEME ! Please reply yes or no..."
 
-        msg = Message(subject, recipients=recipients, body=body)
-        mail.send(msg)
-#in email the person should be able to hit yes or no
+        msg.recipients = recipients
+#send emails with all information
+        with mail.record_messages() as outbox:
+            mail.send_message(subject, msg, recipients=recipients)
+
+            assert len(outbox) == 1
+            assert outbox[0].subject == "testing"
     else:
         return render_template("events/confirm.html")
         
-#app_route("/events/event-id/RSVP")
-#def RSVP
-#HTML - rsvp - it will have person give their name, dish text, and select dish type from event
+@app.route("/events/<int:event_id>/rsvps/rsvp")
+def rsvp(event_id):
+
 #if method is post - #get answer from RSVP email ("YES" or "NO")
     #if RSVP is no
     #enter answer & name into RSVP database
@@ -290,7 +302,7 @@ def confirm():
     #ask attendee to put in name, text of dish they're bringing, what type of dish
         #the type will be written out like 1-entree, 2-sidedish, etc
     #enter information into dishes database
-    
+  return render_template("rsvps/rsvp.html")  
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
