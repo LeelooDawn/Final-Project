@@ -292,9 +292,24 @@ def confirm(event_id):
         
 @app.route("/events/<int:event_id>/rsvps/rsvp")
 def rsvp(event_id):
+    event_id = event_id
+    con = sqlite3.connect(db)
+    cur = con.cursor()
+    #get event data and dish data
+    cur.execute("BEGIN")
+    #get dish data from event-data
+    dish_data = cur.execute("SELECT dish_type, amount_of_type FROM dishes WHERE event_id = ?", (event_id,))
 
-#if method is post - #get answer from RSVP email ("YES" or "NO")
+    if request.method == "POST":
+        #get answer from RSVP email ("YES" or "NO")
+        no = request.form.get("no")
+        yes = request.form.get("yes")
+
     #if RSVP is no
+        if no:
+            return render_template("no.html")
+        if yes:
+
     #enter answer & name into RSVP database
     #show "Sorry you can't make it, create your own event here"
     #if RSVP is yes
