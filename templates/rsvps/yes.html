@@ -5,76 +5,33 @@ endblock %} {% block main %}
 <div class="container">
   <form action="/yes" method="post">
     <label for="yes">You are attending the event</label>
-    <input name="yes" value="yes" type="text" />
+    <input name="response" value="yes" type="text" />
     <label for="name">Type in your name one more time</label>
     <input name="name" type="text" />
     <h6>This event needs</h6>
+    <ul>
+      {% for dish in dishes %}
+      <li>{{ dish }}</li>
+      {% endfor %}
+    </ul>
     <label for="dishtype">Please tell us which type of dish you'll bring</label>
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        value="entree"
-        id="entree"
-        name="selection"
-      />
-      <label class="form-check-label" for="entree">
-        Entrees (ex: a main-dish like Lasagna)
-      </label>
-    </div>
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        value="sidedish"
-        id="sidedish"
-        name="selection"
-      />
-      <label class="form-check-label" for="sidedish">
-        Side-Dishes (ex: potato salad, chips & dip)
-      </label>
-    </div>
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        value="dessert"
-        id="dessert"
-        name="selection"
-      />
-      <label class="form-check-label" for="desserts">
-        Desserts (ex: cheesecake, cookies)
-      </label>
-    </div>
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        value="beverage"
-        id="beverage"
-        name="selection"
-      />
-      <label class="form-check-label" for="beverages">
-        Beverages (ex: sparkling water, cokes)
-      </label>
-    </div>
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        value="dishware"
-        id="dishware"
-        name="selection"
-      />
-      <label class="form-check-label" for="dishware">
-        I'll bring dishware! (ex: forks, knives, paper plates)
-      </label>
-    </div>
     <div>
       <label for="dishtext">Type in what you will bring</label>
       <input type="text" name="dishtext" placeholder="pepperoni pizza" />
+      <input type="number" name="dishtype" min="1" max="5" />
     </div>
   </form>
+  <p>
+    Please use this list for the type of dish you're bringing and input the
+    cooresponding number
+  </p>
+  <ol>
+    <li>Entree</li>
+    <li>Side-dish</li>
+    <li>Dessert</li>
+    <li>Beverages</li>
+    <li>Dish Ware</li>
+  </ol>
 </div>
 <a href="{{ url_for ('recipes') }}" target="_blank"
   >Search for Dish Ideas here!</a
