@@ -8,17 +8,17 @@ from py_edamam import Edamam
 import sqlite3
 from functools import wraps
 from datetime import datetime
-from flask_mail import Mail, Message
+from flask_mail import Mail, Message, get_body
 from blinker import signal
 
 app = Flask(__name__)
-app.config['MAIL_SERVER']= 'smtp.gmail.com' 
-app.config['MAIL_PORT'] = 465
+app.config['MAIL_SERVER']= 'localhost' 
+app.config['MAIL_PORT'] = 25
 app.config['MAIL_USERNAME'] = os.environ.get('EMAIL')
 app.config['MAIL_PASSWORD'] = os.environ.get('PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_TESTING'] = True
+app.config['MAIL_SUPPRESS_SEND'] = True
 mail = Mail(app)
 
 
@@ -270,55 +270,64 @@ def confirm(event_id):
     formatted_datetime=session.get("formatted_datetime")
 
     subject = "You're Invited to a Potluck Party!"
-    msg = Message(subject, body='', html='')
-    msg.html = render_template("email_template.html", event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, username=username)
+
 #enter emails and names into a form to send out
     if request.method == "POST":
         names = request.form.getlist("name")
         emails = request.form.getlist("email")
         recipients = []
         for name, email in zip(names, emails):
-            recipients.append((emails))
-
-        msg.recipients = recipients
-#send emails with all information
-        with mail.record_messages() as outbox:
-            mail.send_message(subject, msg, recipients=recipients)
-
-            assert len(outbox) == 1
-            assert outbox[0].subject == "testing"
+            recipients.append(email)
+        send_email(recipients, subject, names)
     else:
         return render_template("events/confirm.html")
-        
-@app.route("/events/<int:event_id>/rsvps/rsvp")
-def rsvp(event_id):
-    event_id = event_id
-    con = sqlite3.connect(db)
-    cur = con.cursor()
-    #get event data and dish data
-    cur.execute("BEGIN")
-    #get dish data from event-data
-    dish_data = cur.execute("SELECT dish_type, amount_of_type FROM dishes WHERE event_id = ?", (event_id,))
+#send email function
+    def send_email(recipients, subject, names):
+        for name, email in zip(names, recipients):
+        msg = Message(subject, recipients=[email])
+        msg.html = render_template("email_template.html", name=name, event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, username=username)
+        mail.send(msg)
+    return "Invites sent successfully!"
 
-    if request.method == "POST":
-        #get answer from RSVP email ("YES" or "NO")
-        no = request.form.get("no")
-        yes = request.form.get("yes")
+#if RSVP is yes
+def will_attend(event_id):
+event_id = event_id
+con = sqlite3.connect(db)
+cur = con.cursor()
+    #get dish data from event-data to show how many dishes the person needs
+cur.execute("SELECT dish_type, amount_of_type FROM dishes WHERE event_id = ?", (event_id,))
+dish_data = cur.fetchall()
 
-    #if RSVP is no
-        if no:
-            return render_template("no.html")
-        if yes:
-
-    #enter answer & name into RSVP database
-    #show "Sorry you can't make it, create your own event here"
-    #if RSVP is yes
     #enter answer & Name into RSVP database
     #ask attendee to put in name, text of dish they're bringing, what type of dish
         #the type will be written out like 1-entree, 2-sidedish, etc
-    #enter information into dishes database
-  return render_template("rsvps/rsvp.html")  
+    #enter information into dishes database      
+@app.route("/rsvps/rsvp/<int:event_id>")
+def rsvp(event_id):
+    event_id = event_id
+    email = request.get_json()
+    body = email["content"]
+    name = get_name_from_email(body)
+    con = sqlite3.connect(db)
+    cur = con.cursor()
 
+    if request.method == "POST":
+        response = request.form.get("response")
+    #if RSVP is no
+        if response == "no":
+            no = False 
+            cur.execute = ("INSERT INTO rsvps (event_id, name, response) VALUES (?, ?, ?, ?)", (event_id, name, no))
+            cur.close()
+            con.close()
+            return render_template("rsvps/no.html")
+        if response == "yes":
+            will_attend(event_id)
+            return redirect("rsvps/yes.html")
+    else:
+        return render_template("/rsvps/rsvp/<int:event_id>")
+
+
+return render_template("rsvps/rsvp.html")
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
     #contact API 

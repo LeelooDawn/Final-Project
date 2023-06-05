@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block title %} Potluck Party: Confirm Event{%
+{% extends "layout.html" %} {% block title %} Potluck Party: You're Invited{%
 endblock %} {% block main %}
 <h1>Hello! You're invited!</h1>
 <p>Can you Make it?</p>
@@ -9,8 +9,8 @@ endblock %} {% block main %}
 {% endfor %}
 <form action="rsvp" method="post">
   <label for="yes">YES</label>
-  <input type="submit" value="Yes" name="yes" />
+  <input type="submit" value="Yes" name="response" />
   <label for="no">NO</label>
-  <input type="submit" value="No" name="no" />
+  <input type="submit" value="No" name="response" />
 </form>
 {% endblock %}
