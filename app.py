@@ -291,47 +291,46 @@ def confirm(event_id):
 
 #if RSVP is yes
 def will_attend(event_id):
-event_id = event_id
-con = sqlite3.connect(db)
-cur = con.cursor()
+    con = sqlite3.connect(db)
+    cur = con.cursor()
     #get dish data from event-data to show how many dishes the person needs
 
-cur.execute("SELECT dish_type, amount_of_type FROM dishes WHERE event_id = ?", (event_id,))
-dish_data = cur.fetchall()
-dish_list = []
-for dish_type, amount_of_type in dish_data:
-    if dish_type == 1:
-        dish_text = "Entree"
-    if dish_type == 2:
-        dish_text == "Side Dish"
-    if dish_type == 3:
-        dish_text == "Desserts"
-    if dish_type == 4:
-        dish_text == "Beverages"
-    if dish_type == 5:
-        dish_text == "Dish Ware"
+    cur.execute("SELECT dish_type, amount_of_type FROM dishes WHERE event_id = ?", (event_id,))
+    dish_data = cur.fetchall()
+    dish_list = []
+    for dish_type, amount_of_type in dish_data:
+        if dish_type == 1:
+            dish_text = "Entree"
+        if dish_type == 2:
+            dish_text = "Side Dish"
+        if dish_type == 3:
+            dish_text = "Desserts"
+        if dish_type == 4:
+            dish_text = "Beverages"
+        if dish_type == 5:
+            dish_text = "Dish Ware"
 
-    dish_info = f"{dish_text} = {amount_of_type}"
-    dish_list.append(dish_info)
+        dish_info = f"{dish_text} = {amount_of_type}"
+        dish_list.append(dish_info)
 #ask attendee to put in name, text of dish they're bringing, what type of dish 
-    if request.method == "POST"
+    if request.method == "POST":
         name = request.form.get("name")
         response = request.form.get("response")
         dishtext = request.form.get("dishtext")
         dishtype = request.form.get("dishtype")
 
         response = True 
-        cur.execute=("BEGIN")
+        cur.execute("BEGIN")
         #insert the RSVP response
-        cur.execute=("INSERT INTO rsvps (event_id, name, response) VALUES (?, ?, ?)", (event_id, name, response))
+        cur.execute("INSERT INTO rsvps (event_id, name, response) VALUES (?, ?, ?)", (event_id, name, response))
         rsvp_id = cur.lastrowid
         #insert the dishes response
-        cur.execute=("INSERT INTO dishes(dishtext, name, dishtype, rsvp_id) VALUES(?,?,?,?)", (dishtext, name, dishtype, rsvp_id))
-        cur.execute=("COMMIT")
+        cur.execute("INSERT INTO dishes(dishtext, name, dishtype, rsvp_id) VALUES(?,?,?,?)", (dishtext, name, dishtype, rsvp_id))
+        cur.execute("COMMIT")
         con.close()
 
         return "You've successfully RSVPd, See you Soon!"
-return render_template("/rsvps/rsvp/yes.html", dishes=dish_list)
+return render_template("/rsvps/yes.html", dishes=dish_list)
           
 @app.route("/rsvps/rsvp/<int:event_id>")
 def rsvp(event_id):
