@@ -1,3 +1,21 @@
 body {
+  background-color: rgb(245, 186, 245);
+}
+
+.main-container {
   background-color: aliceblue;
+  margin-top: 10px;
+}
+
+.background {
+  background-image: url("potluck.jpg");
+  opacity: 0.4;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
 }

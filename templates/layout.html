@@ -20,18 +20,6 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand">Potluck Party!</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -53,25 +41,26 @@
               >
             </li>
           </ul>
-
-          <span class="navbar-text me-4 fw-bold"
+          <span class="navbar-text me-2"
             ><a class="nav-link" href="{{ url_for ('login') }}"> Log In</a>
+          </span>
+          <span class="navbar-text me-2">
             <a class="nav-link" href="{{ url_for ('logout') }}"> Log Out</a>
           </span>
-          <span class="navbar-text"
-            ><a class="nav-link" href="{{ url_for ('register') }}">
-              Register Here!</a
-            >
+          <span class="navbar-text fw-bold"
+            ><a class="nav-link" href="{{ url_for ('register') }}"> Register</a>
           </span>
         </div>
       </div>
     </nav>
-    <div class="container main-container">
+    <div class="background"></div>
+    <h1 class="text-center header mt-3">Potluck Party!</h1>
+    <h4 class="text-center">The Perfect Place for Potluck Planning</h4>
+    <div class="container main-container rounded border border-danger-subtle">
       <main>{% block main %} {% endblock %}</main>
     </div>
     <footer class="fixed-bottom text-center">
-      <h4>The Perfect Place for Potluck Planning!</h4>
-      <p>Website built using Flask/Python by Leslie Nesbit</p>
+      <p>Website built using Flask/Sqlite3/Python by Leslie Nesbit</p>
     </footer>
   </body>
 </html>
