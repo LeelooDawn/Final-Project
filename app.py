@@ -280,16 +280,16 @@ def confirm(event_id):
     event_data = session.get("event_data")
     formatted_datetime=session.get("formatted_datetime")
 
-    subject = "You're Invited to a Potluck Party!"
-
 #enter emails and names into a form to send out
     if request.method == "POST":
+        subject = "You're Invited to a Potluck Party!"
         names = request.form.getlist("name")
         emails = request.form.getlist("email")
         recipients = []
         for name, email in zip(names, emails):
             recipients.append(email)
         send_email(recipients, subject, names, event_data, event_id, formatted_datetime, username)
+        return "Invites sent"
     else:
         return render_template("events/confirm.html")
 
