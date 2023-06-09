@@ -1,79 +1,113 @@
 {% extends "layout.html" %} {% block title %} Potluck Party: new event {%
 endblock %} {% block main %}
-<h1>Here is what you want for your Potluck</h1>
-<p>
+<h1 class="profilename text-center">Here is what you want for your Potluck</h1>
+<p class="text-center">
   Please check it over, add how many dishes you need of each type, and hit
   submit when you're ready!
 </p>
-<form action="/events/newevent" method="post">
-  <div>
-    <label for="event">Title:</label>
-    <input type="text" id="event" name="name" value="{{ name }}" required />
-    <label for="event">Theme:</label>
-    <input type="text" id="event" name="theme" value="{{ theme }}" required />
-    <label for="event">Location:</label>
-    <input
-      type="text"
-      id="event"
-      name="location"
-      value="{{ location }}"
-      required
-    />
-    <label for="event">Date & Time:</label>
-    <input
-      type="text"
-      id="event"
-      name="datetime"
-      value="{{ datetime }}"
-      required
-    />
-  </div>
-  {% if 'entree' in selected_dishes %}
-  <label for="numberofdishes">How Many Entrees?:</label>
-  <input
-    type="number"
-    min="1"
-    max="10"
-    name="entrees"
-    id="numberofdishes"
-  /><br />
-  {% endif %} {% if 'sidedish' in selected_dishes %}
-  <label for="numberofdishes">How Many Side-Dishes?:</label>
-  <input
-    type="number"
-    min="1"
-    max="10"
-    name="side_dish"
-    id="numberofdishes"
-  /><br />
-  {% endif %} {% if 'dessert' in selected_dishes %}
-  <label for="numberofdishes">How Many Desserts?:</label>
-  <input
-    type="number"
-    min="1"
-    max="10"
-    name="desserts"
-    id="numberofdishes"
-  /><br />
-  {% endif %} {% if 'beverage' in selected_dishes %}
-  <label for="numberofdishes">How Many Beverages?:</label>
-  <input
-    type="number"
-    min="1"
-    max="10"
-    name="beverages"
-    id="numberofdishes"
-  /><br />
-  {% endif %} {% if 'dishware' in selected_dishes %}
-  <label for="numberofdishes">How Much Dish-Ware?:</label>
-  <input
-    type="number"
-    min="1"
-    max="10"
-    name="dish_ware"
-    id="numberofdishes"
-  /><br />
-  {% endif %}
-  <input type="submit" value="Confirm Event" />
-</form>
+<div class="container eventcontainer">
+  <form action="/events/newevent" method="post">
+    <div class="mb-3">
+      <label for="event" class="form-label">Title:</label>
+      <input
+        type="text"
+        id="event"
+        name="name"
+        value="{{ name }}"
+        class="form-control"
+        required
+      />
+
+      <label for="event" class="form-label">Theme:</label>
+      <input
+        type="text"
+        id="event"
+        name="theme"
+        value="{{ theme }}"
+        class="form-control"
+        required
+      />
+
+      <label for="event" class="form-label">Location:</label>
+      <input
+        type="text"
+        id="event"
+        name="location"
+        value="{{ location }}"
+        class="form-control"
+        required
+      />
+
+      <label for="event" class="form-label">Date & Time:</label>
+      <input
+        type="text"
+        id="event"
+        name="datetime"
+        value="{{ datetime }}"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      {% if 'entree' in selected_dishes %}
+      <label for="numberofdishes" class="form-label">How Many Entrees?:</label>
+      <input
+        type="number"
+        min="1"
+        max="10"
+        name="entrees"
+        id="numberofdishes"
+        class="form-control"
+      />
+      {% endif %} {% if 'sidedish' in selected_dishes %}
+      <label for="numberofdishes" class="form-label"
+        >How Many Side-Dishes?:</label
+      >
+      <input
+        type="number"
+        min="1"
+        max="10"
+        name="side_dish"
+        id="numberofdishes"
+        class="form-control"
+      />
+      {% endif %} {% if 'dessert' in selected_dishes %}
+      <label for="numberofdishes" class="form-label">How Many Desserts?:</label>
+      <input
+        type="number"
+        min="1"
+        max="10"
+        name="desserts"
+        id="numberofdishes"
+        class="form-control"
+      />
+      {% endif %} {% if 'beverage' in selected_dishes %}
+      <label for="numberofdishes" class="form-label"
+        >How Many Beverages?:</label
+      >
+      <input
+        type="number"
+        min="1"
+        max="10"
+        name="beverages"
+        id="numberofdishes"
+        class="form-control"
+      />
+      {% endif %} {% if 'dishware' in selected_dishes %}
+      <label for="numberofdishes" class="form-label"
+        >How Much Dish-Ware?:</label
+      >
+      <input
+        type="number"
+        min="1"
+        max="10"
+        name="dish_ware"
+        id="numberofdishes"
+        class="form-control"
+      />
+      {% endif %}
+    </div>
+    <input type="submit" value="Confirm Event" class="btn profilebtn mt-3" />
+  </form>
+</div>
 {% endblock %}

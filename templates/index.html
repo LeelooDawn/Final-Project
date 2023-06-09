@@ -1,19 +1,15 @@
 {% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
 main %}
 <div class="container">
-  <h1><strong>Welcome {{ session.username }}!</strong></h1>
+  <h1 class="profilename">Welcome {{ session.username }}!</h1>
 </div>
-<div class="container">
-  <button type="submit" class="btn btn-info">
-    <a href="{{ url_for ('events') }}">Create your event here!</a>
-  </button>
-</div>
-<h6>Event information</h6>
-<p>
-  Here you can see your event, who has replied, and what dish they are bringing
+<br />
+<br />
+<p class="text-center">
+  Here is your event, who has replied, and what dish they are bringing
 </p>
-<table class="table">
-  <thead class="thead-dark">
+<table class="table table-success table-striped">
+  <thead>
     <tr>
       <th scope="col">Event Title</th>
       <th scope="col">Event Date</th>
@@ -32,8 +28,8 @@ main %}
     {% endfor %}
   </tbody>
 </table>
-<table class="table">
-  <thead class="thead-light">
+<table class="table table-striped">
+  <thead>
     <tr>
       <th scope="col">Guest Name</th>
       <th scope="col">RSVP (yes/no)</th>
@@ -50,5 +46,10 @@ main %}
     {% endfor %}
   </tbody>
 </table>
+<div class="container centerbtn">
+  <button type="submit" class="btn profilebtn">
+    <a href="{{ url_for ('events') }}">Create a new event here!</a>
+  </button>
+</div>
 
 {% endblock %}

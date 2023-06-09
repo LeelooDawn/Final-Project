@@ -1,41 +1,91 @@
 {% extends "layout.html" %} {% block title %} Potluck Party: Confirm Event{%
 endblock %} {% block main %}
-<h1>Send Invitations</h1>
-<div>
+<h1 class="profilename text-center">Send Invitations</h1>
+<div class="grid gap-3 eventcontainer">
   {% for data in event_data %}
-  <h5>{{ data[1] }}</h5>
-  <h4>{{ data[3] }}</h4>
-  <h4>{{ data[4] }}</h4>
+  <div class="p-2 g-col-6"><strong>Title:</strong> {{ data[1] }}</div>
+  <div class="p-2 g-col-6"><strong>Location:</strong> {{ data[3] }}</div>
+  <div class="p-2 g-col-6"><strong>Theme:</strong> {{ data[4] }}</div>
   {% endfor %}
-  <h4>{{ formatted_datetime }}</h4>
-  {% for x,y in dishes_needed %}
-  <li>You need {{ y }} of {{ x }}</li>
-  {% endfor %}
+  <div class="p-2 g-col-6"><strong>Date:</strong> {{ formatted_datetime }}</div>
 </div>
-<h2>Please enter the emails and names of the people you'd like to invite.</h2>
-<h3>
+<div class="container eventcontainer">
+  <ul>
+    {% for x,y in dishes_needed %}
+    <li>You need {{ y }} of {{ x }}</li>
+    {% endfor %}
+  </ul>
+</div>
+<h4 class="text-center profilename">
+  Please enter the emails and names of the people you'd like to invite.
+</h4>
+<h6 class="text-center profilename">
   Once you have entered them all, hit submit and the invitations will be sent!
-</h3>
-<form action="/confirm" method="post">
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" name="name" id="name" required />
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required />
-  </div>
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" name="name" id="name1" required />
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required />
-  </div>
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" name="name" id="name2" required />
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required />
-  </div>
-  <input type="submit" value="Send Invitations" />
-</form>
+</h6>
+<div class="container eventcontainer">
+  <form action="/confirm" method="post">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        id="numberofdishes"
+        class="form-control"
+        required
+      />
+      <label for="email" class="form-label">Email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        id="numberofdishes"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input
+        type="text"
+        name="name"
+        id="name1"
+        id="numberofdishes"
+        class="form-control"
+        required
+      />
+      <label for="email" class="form-label">Email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        id="numberofdishes"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input
+        type="text"
+        name="name"
+        id="name2"
+        id="numberofdishes"
+        class="form-control"
+        required
+      />
+      <label for="email" class="form-label">Email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        id="numberofdishes"
+        class="form-control"
+        required
+      />
+    </div>
+    <input type="submit" value="Send Invitations" class="btn profilebtn mt-3" />
+  </form>
+</div>
 
 {% endblock %}

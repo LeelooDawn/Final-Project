@@ -8,17 +8,16 @@ from py_edamam import Edamam
 import sqlite3
 from functools import wraps
 from datetime import datetime
-from flask_mail import Mail, Message, get_body
+from flask_mail import Mail, Message
 from blinker import signal
 
 app = Flask(__name__)
-app.config['MAIL_SERVER']= 'localhost' 
-app.config['MAIL_PORT'] = 25
+app.config['MAIL_SERVER']= 'smtp.gmail.com' 
+app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = os.environ.get('EMAIL')
 app.config['MAIL_PASSWORD'] = os.environ.get('PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_SUPPRESS_SEND'] = True
 mail = Mail(app)
 
 
@@ -261,6 +260,14 @@ def newevent():
     else:
         return render_template("events/newevent.html")
 
+#send email function
+def send_email(recipients, subject, names, event_data, event_id, formatted_datetime, username):
+    for name, email in zip(names, recipients):
+        msg = Message(subject, recipients=[email])
+        msg.html = render_template("email_template.html", name=name, event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, username=username)
+        mail.send(msg)
+return "Invites sent successfully!"
+
 @app.route("/events/<int:event_id>/confirm", methods=["GET", "POST"])
 def confirm(event_id):
     event_id = event_id
@@ -278,18 +285,13 @@ def confirm(event_id):
         recipients = []
         for name, email in zip(names, emails):
             recipients.append(email)
-        send_email(recipients, subject, names)
+        send_email(recipients, subject, names, event_data, event_id, formatted_datetime, username)
     else:
         return render_template("events/confirm.html")
-#send email function
-    def send_email(recipients, subject, names):
-        for name, email in zip(names, recipients):
-        msg = Message(subject, recipients=[email])
-        msg.html = render_template("email_template.html", name=name, event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, username=username)
-        mail.send(msg)
-    return "Invites sent successfully!"
+
 
 #if RSVP is yes
+@app.route("/rsvps/yes.html", methods=["GET", "POST"])
 def will_attend(event_id):
     con = sqlite3.connect(db)
     cur = con.cursor()
@@ -330,7 +332,8 @@ def will_attend(event_id):
         con.close()
 
         return "You've successfully RSVPd, See you Soon!"
-return render_template("/rsvps/yes.html", dishes=dish_list)
+    else:
+        return render_template("/rsvps/yes.html", dishes=dish_list)
           
 @app.route("/rsvps/rsvp/<int:event_id>")
 def rsvp(event_id):
@@ -356,8 +359,6 @@ def rsvp(event_id):
     else:
         return render_template("/rsvps/rsvp/<int:event_id>")
 
-
-return render_template("rsvps/rsvp.html")
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
     #contact API 

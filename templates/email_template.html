@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body style="background-color: lightpink">
-    <div class="container-md" style="background-color: linen">
+    <div class="container-md mt-4" style="background-color: linen">
       <p class="lead">You've been invited!</p>
       <p>
         Hi {{ name }}! You're invited to {{ event_data.event_name }} by {{
@@ -27,7 +27,9 @@
       <p>Time: {{ formatted_datetime }}</p>
       <p>Location: {{ event_data.event_location }}</p>
       <p>Message: {{ event_data.event_theme }}</p>
-      <a href="{{ url_for('rsvp', event_id=event_id) }}">RSVP to this event</a>
+      <a href="{{ url_for('rsvp', event_id=event_id) }}"
+        >Click here to respond to this event</a
+      >
     </div>
   </body>
 </html>

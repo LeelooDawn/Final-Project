@@ -1,109 +1,113 @@
 {% extends "layout.html" %} {% block title %} Event Planning {% endblock %} {%
 block main %}
 <div class="mb-4">
-  <h1>Plan your next Potluck Party!</h1>
+  <h1 class="profilename text-center">Plan your next Potluck Party</h1>
 </div>
-<form action="/events" method="post">
-  <div class="mb-3">
-    <label for="eventtitle" class="form-label">Potluck Title</label>
-    <input
-      type="text"
-      class="form-control"
-      id="eventtitle"
-      name="eventtitle"
-      placeholder="ex: Pizza Party Potluck"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="datetime" class="form-label">Enter a date and time:</label>
-    <input
-      id="datetime"
-      type="datetime-local"
-      name="datetime"
-      class="form-control"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="eventtheme" class="form-label">Is there a Theme?</label>
-    <input
-      type="text"
-      class="form-control"
-      id="eventtheme"
-      name="eventtheme"
-      placeholder="Pie Day!"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="eventlocation" class="form-label">What is the location?</label>
-    <input
-      type="text"
-      class="form-control"
-      id="eventlocation"
-      name="eventlocation"
-      placeholder="The Office LunchRoom"
-    />
-  </div>
-  <h4>What types of dishes do you need?</h4>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      value="entree"
-      id="entree"
-      name="selection"
-    />
-    <label class="form-check-label" for="flexCheckDefault">
-      Entrees (ex: a main-dish like Lasagna)
-    </label>
-  </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      value="sidedish"
-      id="sidedish"
-      name="selection"
-    />
-    <label class="form-check-label" for="flexCheckDefault">
-      Side-Dishes (ex: potato salad, chips & dip)
-    </label>
-  </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      value="dessert"
-      id="dessert"
-      name="selection"
-    />
-    <label class="form-check-label" for="flexCheckDefault">
-      Desserts (ex: cheesecake, cookies)
-    </label>
-  </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      value="beverage"
-      id="beverage"
-      name="selection"
-    />
-    <label class="form-check-label" for="flexCheckDefault">
-      Beverages (ex: sparkling water, cokes)
-    </label>
-  </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      value="dishware"
-      id="dishware"
-      name="selection"
-    />
-    <label class="form-check-label" for="flexCheckDefault">
-      I need dishware! (ex: forks, knives, paper plates)
-    </label>
-  </div>
-  <input type="submit" value="Create Event" />
-</form>
+<div class="container eventcontainer">
+  <form action="/events" method="post">
+    <div class="mb-3">
+      <label for="eventtitle" class="form-label">Potluck Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="eventtitle"
+        name="eventtitle"
+        placeholder="ex: Pizza Party Potluck"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="datetime" class="form-label">Enter a date and time:</label>
+      <input
+        id="datetime"
+        type="datetime-local"
+        name="datetime"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="eventtheme" class="form-label">Is there a Theme?</label>
+      <input
+        type="text"
+        class="form-control"
+        id="eventtheme"
+        name="eventtheme"
+        placeholder="Pie Day!"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="eventlocation" class="form-label"
+        >What is the location?</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="eventlocation"
+        name="eventlocation"
+        placeholder="The Office LunchRoom"
+      />
+    </div>
+    <h4>What types of dishes do you need?</h4>
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value="entree"
+        id="entree"
+        name="selection"
+      />
+      <label class="form-check-label" for="flexCheckDefault">
+        Entrees (ex: a main-dish like Lasagna)
+      </label>
+    </div>
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value="sidedish"
+        id="sidedish"
+        name="selection"
+      />
+      <label class="form-check-label" for="flexCheckDefault">
+        Side-Dishes (ex: potato salad, chips & dip)
+      </label>
+    </div>
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value="dessert"
+        id="dessert"
+        name="selection"
+      />
+      <label class="form-check-label" for="flexCheckDefault">
+        Desserts (ex: cheesecake, cookies)
+      </label>
+    </div>
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value="beverage"
+        id="beverage"
+        name="selection"
+      />
+      <label class="form-check-label" for="flexCheckDefault">
+        Beverages (ex: sparkling water, cokes)
+      </label>
+    </div>
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value="dishware"
+        id="dishware"
+        name="selection"
+      />
+      <label class="form-check-label" for="flexCheckDefault">
+        I need dishware! (ex: forks, knives, paper plates)
+      </label>
+    </div>
+    <input type="submit" value="Create Event" class="btn profilebtn mt-3" />
+  </form>
+</div>
 {% endblock %}

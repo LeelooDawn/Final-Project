@@ -1,21 +1,23 @@
 {% extends "layout.html" %} {% block title %} Dish Ideas {% endblock %} {% block
 main %}
 <div class="container">
-  <h1>Search For Recipe Ideas Here!</h1>
+  <h1 class="text-center recipes">Search For Recipe Ideas Here!</h1>
 </div>
-<form action="/recipes" method="post">
-  <input
-    class="mr-sm-2"
-    type="search"
-    placeholder="ex: Chicken Soup"
-    aria-label="Search"
-    name="search"
-  />
-  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-    Search
-  </button>
-</form>
-<h2>Recipes</h2>
+<div class="container centerbtn">
+  <form action="/recipes" method="post">
+    <input
+      class="mr-sm-2 recipesearch"
+      type="search"
+      placeholder="ex: cheese appetizers"
+      aria-label="Search"
+      name="search"
+    />
+    <button class="btn my-2 my-sm-0 recipesearch recipebtn" type="submit">
+      Search
+    </button>
+  </form>
+</div>
+<h2 class="text-center recipes">Recipes</h2>
 
 <div class="row">
   {% for recipe in recipe_list %} {% if loop.index0 % 4 == 0 %}
@@ -31,7 +33,7 @@ main %}
         <div class="card-body">
           <h5 class="card-title">{{ recipe['label'] }}</h5>
           <p class="card-text">source: {{ recipe['source'] }}</p>
-          <a href="{{ recipe['url'] }}" target="_blank" class="btn btn-primary"
+          <a href="{{ recipe['url'] }}" target="_blank" class="btn recipebtn"
             >Get Recipe</a
           >
         </div>
