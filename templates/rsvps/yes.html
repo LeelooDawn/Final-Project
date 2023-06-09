@@ -4,9 +4,9 @@ endblock %} {% block main %}
 
 <div class="container">
   <form action="/yes" method="post">
-    <label for="yes">You are attending the event</label>
+    <label for="yes" class="form-label">You are attending the event</label>
     <input name="response" value="yes" type="text" />
-    <label for="name">Type in your name one more time</label>
+    <label for="name" class="form-label">Type in your name one more time</label>
     <input name="name" type="text" />
     <h6>This event needs</h6>
     <ul>
@@ -14,16 +14,31 @@ endblock %} {% block main %}
       <li>{{ dish }}</li>
       {% endfor %}
     </ul>
-    <label for="dishtype">Please tell us which type of dish you'll bring</label>
-    <div>
-      <label for="dishtext">Type in what you will bring</label>
-      <input type="text" name="dishtext" placeholder="pepperoni pizza" />
-      <input type="number" name="dishtype" min="1" max="5" />
+    <div class="container eventcontainer">
+      <label for="dishtext" class="form-label"
+        >Type in what you will bring to the party and what type of dish it will
+        be:</label
+      >
+      <input
+        type="text"
+        name="dishtext"
+        placeholder="pepperoni pizza"
+        class="form-control"
+        required
+      />
+      <input
+        type="number"
+        name="dishtype"
+        min="1"
+        max="5"
+        class="form-control"
+        required
+      />
     </div>
   </form>
   <p>
     Please use this list for the type of dish you're bringing and input the
-    cooresponding number
+    cooresponding number:
   </p>
   <ol>
     <li>Entree</li>
@@ -34,6 +49,6 @@ endblock %} {% block main %}
   </ol>
 </div>
 <a href="{{ url_for ('recipes') }}" target="_blank"
-  >Search for Dish Ideas here!</a
+  ><strong>Search for Dish Ideas here!</strong></a
 >
 {% endblock %}

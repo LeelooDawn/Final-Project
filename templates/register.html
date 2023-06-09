@@ -1,14 +1,15 @@
 {% extends "layout.html" %} {% block title %} Register {% endblock %} {% block
 main %}
-<div class="container">
-  <div class="row">
-    <div class="col-4 text-start">
-      <h4>Plan Your Potluck!</h4>
-      <p>- Invite Friends</p>
-      <p>- Create Events</p>
-      <p>- Find Recipes</p>
-      <p>- Get Reminders</p>
+  <div class="card eventcontainer">
+    <div class="card-body">
+    <h4 class="text-center">Plan Your Potluck!</h4>
+    <p class="text-center">- Invite Friends</p>
+    <p class="text-center">- Create Events</p>
+    <p class="text-center">- Find Recipes</p>
+    <p class="text-center">- Get Reminders</p>
     </div>
+  </div>
+  <div class="container eventcontainer">
     <div class="col-8 text-center">
       <h1 class="mb-3">Register Here</h1>
       <form action="/register" method="post">

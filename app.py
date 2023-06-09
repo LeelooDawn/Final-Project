@@ -20,8 +20,6 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
-
-
 #configure SQL database
 db = "/users/leslienesbit/Documents/GitHub Projects/Final Project/potluck.db"
 
@@ -34,8 +32,13 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-#make sure API key is set in server start
-
+#send email function
+def send_email(recipients, subject, names, event_data, event_id, formatted_datetime, username):
+    for name, email in zip(names, recipients):
+        msg = Message(subject, recipients=[email])
+        msg.html = render_template("email_template.html", name=name, event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, username=username)
+        mail.send(msg)
+    return "Invites sent successfully!"
 
 #configure session to use filesystem instead of signed cookies
 app.config["SESSION_PERMANENT"] = False
@@ -69,6 +72,15 @@ def index():
             row = row[:1] + (formatted_datetime,) + row[2:]
             event_data.append(row)
 
+            if row[5] == 1:
+                response_text = "Yes"
+            elif row[5] == 0:
+                response_text = "No"
+            else:
+                response_text = "Unknown"
+            
+            row = row[:5] + (response_text,) + row[6:]
+            event_data.append(row)
     
     con.close()
     return render_template("index.html", event_data=event_data)    
@@ -116,7 +128,7 @@ def logout():
     #forget any user_id
 	session.pop("username", None)
     #redirect user to log in form
-	return redirect("/")
+	return redirect("/login")
 
 #app route register user 
 @app.route("/register", methods=["GET", "POST"])
@@ -259,14 +271,6 @@ def newevent():
         return render_template("events/confirm.html", event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, dishes_needed=convert_dishes_needed)
     else:
         return render_template("events/newevent.html")
-
-#send email function
-def send_email(recipients, subject, names, event_data, event_id, formatted_datetime, username):
-    for name, email in zip(names, recipients):
-        msg = Message(subject, recipients=[email])
-        msg.html = render_template("email_template.html", name=name, event_data=event_data, event_id=event_id, formatted_datetime=formatted_datetime, username=username)
-        mail.send(msg)
-return "Invites sent successfully!"
 
 @app.route("/events/<int:event_id>/confirm", methods=["GET", "POST"])
 def confirm(event_id):

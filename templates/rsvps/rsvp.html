@@ -1,16 +1,28 @@
 {% extends "layout.html" %} {% block title %} Potluck Party: You're Invited{%
 endblock %} {% block main %}
-<h1>Hello! You're invited!</h1>
-<p>Can you Make it?</p>
-{% for data in event_data %}
-<p>{{ data[1] }}</p>
-<p>{{ data[3] }}</p>
-<p>{{ data[4] }}</p>
-{% endfor %}
-<form action="rsvp" method="post">
-  <label for="yes">YES</label>
-  <input type="submit" value="Yes" name="response" />
-  <label for="no">NO</label>
-  <input type="submit" value="No" name="response" />
-</form>
+<h1 class="profilename text-center">Hello! You're invited!</h1>
+<p class="profilename">Can you Make it?</p>
+<div class="grid gap-3 eventcontainer">
+  {% for data in event_data %}
+  <div class="p-2 g-col-6"><strong>Title:</strong> {{ data[1] }}</div>
+  <div class="p-2 g-col-6"><strong>Location:</strong> {{ data[3] }}</div>
+  <div class="p-2 g-col-6"><strong>Theme:</strong> {{ data[4] }}</div>
+  {% endfor %}
+</div>
+<div class="container eventcontainer">
+  <form action="rsvp" method="post">
+    <input
+      type="submit"
+      value="Yes"
+      name="response"
+      class="btn btn btn-success mt-3"
+    />
+    <input
+      type="submit"
+      value="No"
+      name="response"
+      class="btn btn btn-danger mt-3"
+    />
+  </form>
+</div>
 {% endblock %}
