@@ -4,7 +4,7 @@ CS50 Final Project
 
 # Potluck Party!
 
-#### Video Demo: The video is [linked here]()
+#### Video Demo: The video is [linked here](https://youtu.be/axgyp2LX-QM)
 
 **Potluck Party** is a simple website that helps you plan an event, put in how many dishes, and of what type, you need per event. This then sends an email to your invitees, lets them respond yes/no and tell you what dish they're bringing to the event.
 
