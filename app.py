@@ -344,7 +344,7 @@ def rsvp(event_id):
     event_id = event_id
     email = request.get_json()
     body = email["content"]
-    name = get_name_from_email(body)
+    name = (body)
     con = sqlite3.connect(db)
     cur = con.cursor()
 
