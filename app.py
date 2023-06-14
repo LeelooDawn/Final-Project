@@ -344,7 +344,6 @@ def rsvp(event_id):
     event_id = event_id
     email = request.get_json()
     body = email["content"]
-    name = (body)
     con = sqlite3.connect(db)
     cur = con.cursor()
 
@@ -353,7 +352,7 @@ def rsvp(event_id):
     #if RSVP is no
         if response == "no":
             no = False 
-            cur.execute = ("INSERT INTO rsvps (event_id, name, response) VALUES (?, ?, ?)", (event_id, name, no))
+            cur.execute = ("INSERT INTO rsvps (event_id, name, response) VALUES (?, ?, ?)", (event_id, no))
             cur.close()
             con.close()
             return render_template("rsvps/no.html")
