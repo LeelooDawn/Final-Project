@@ -4,16 +4,14 @@ CS50 Final Project
 
 # Potluck Party!
 
-#### Video Demo: <URL HERE>
+#### Video Demo: The video is [linked here]()
 
-#### Description- Your README.md file should be minimally multiple paragraphs in length, and should explain what your project is, what each of the files you wrote for the project contains and does, and if you debated certain design choices, explaining why you made them. Ensure you allocate sufficient time and energy to writing a README.md that documents your project thoroughly. Be proud of it! If it is too short, the system will reject it.:
+**Potluck Party** is a simple website that helps you plan an event, put in how many dishes, and of what type, you need per event. This then sends an email to your invitees, lets them respond yes/no and tell you what dish they're bringing to the event.
 
-The Potluck Party is a simple website that helps you plan an event, put in how many dishes, and of what type, you need per event. This then sends an email to your invitees, lets them respond yes/no and tell you what dish they're bringing to the event.
+This website relies heavily on databases. I want to be able to store all the information that creating an event requires. I also wanted to get better at Python and organizing everything while planning and building a website.
 
-This website relies heavily on databases. I want to be able to store all the information that creating an event requires.
-I also wanted to get better at Python and organizing everything while planning and building a website.
+### Cool Features:
 
-Cool Features:
 The Host is able to see the event on their user profile page as well as updated RSVPS coming to the event and what dish they are bringing.
 
 There is a separate "Dish Ideas" page which uses the Edamam API to search for recipe ideas. If they click on a recipe it will take them directly to the recipies website.
@@ -26,4 +24,10 @@ EVENTS table - event_name, event_date_time, event_location, event_theme, host_id
 DISHES_NEEDED table - dish_type (linked to dish_type table), amount_of_type, linked to event_id
 DISH_TYPE table - dish_type_id, dish_type_text (i.e 1 = Entree, 2 = Side Dish, etc)
 
-Ultimate Wishlist for this website: I would love to have the website count down to the event date and send a reminder email to the invitees. The reminder email would remind them what dish they signed up to bring or send them to the dish-ideas page if they need help.
+### Hiccups:
+
+I am not able to get the Flask_Mail to work even tho I designed the separate HTML pages and functions to activate after someone sends mail. I think it might be because I need to "redirect" instead of "render_template" at some places, but I was not able to figure it out at this time. I did write the functions for the RSVPs.
+
+### Ultimate Wishlist for this website:
+
+I would love to have the website count down to the event date and send a reminder email to the invitees. The reminder email would remind them what dish they signed up to bring or send them to the dish-ideas page if they need help.
